@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Life OS">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>My Life OS — V4</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--line:#e6e9ef;--accent:#4f46e5;--accent2:#eef2ff;--danger:#dc2626;--shadow:0 8px 25px rgba(16,24,40,.06)}
+[data-theme="dark"]{--bg:#0f1320;--card:#161b2c;--text:#e7e9f2;--muted:#8b93a7;--line:#262c40;--accent:#818cf8;--accent2:#1f2440;--danger:#f87171;--shadow:0 8px 25px rgba(0,0,0,.35)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;transition:background .2s,color .2s}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1150px;margin:auto;padding:18px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap}.brand h1{font-size:24px;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}.iconbtn,.btn{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:10px;padding:9px 12px}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.btn.danger{color:var(--danger)}
+nav{display:flex;gap:6px;overflow:auto;margin-bottom:18px}.navbtn{white-space:nowrap;border:0;background:transparent;padding:10px 13px;border-radius:10px;color:var(--muted)}.navbtn.active{background:var(--accent2);color:var(--accent);font-weight:650}
+.page{display:none}.page.active{display:block}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:16px;box-shadow:var(--shadow)}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-6{grid-column:span 6}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
+.stat{font-size:26px;font-weight:750;margin-top:5px}.muted{color:var(--muted)}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}.section-title h2{font-size:17px;margin:0}
+form{display:grid;gap:10px}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);color:var(--text)}textarea{min-height:100px;resize:vertical}.row{display:flex;gap:8px}.row>*{flex:1}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:var(--card)}.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.item-title{font-weight:650}.item-body{white-space:pre-wrap;margin-top:6px;color:var(--muted)}.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:12px;color:var(--muted)}.tag{background:var(--accent2);border-radius:999px;padding:4px 8px}.priority-high{color:#b42318}.priority-medium{color:#b54708}.priority-low{color:#027a48}[data-theme="dark"] .priority-high{color:#fca5a5}[data-theme="dark"] .priority-medium{color:#fcd34d}[data-theme="dark"] .priority-low{color:#6ee7b7}.done{text-decoration:line-through;opacity:.55}.empty{padding:25px;text-align:center;color:var(--muted)}
+.check{width:20px;height:20px;margin-top:1px}.actions{display:flex;gap:5px;flex-wrap:wrap}.small{font-size:12px;padding:6px 8px}.progress{height:8px;background:var(--accent2);border-radius:99px;overflow:hidden;margin-top:9px}.progress>div{height:100%;background:var(--accent)}
+.searchbar{margin-bottom:12px}.searchbar input{font-size:15px}
+.filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filterbar select{width:auto;flex:1 1 120px}
+.checkrow{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:14px}.checkrow label{display:flex;align-items:center;gap:6px}
+.financetabs{display:flex;gap:6px;overflow:auto;margin-bottom:14px}.ftab{white-space:nowrap;border:1px solid var(--line);background:var(--card);padding:8px 12px;border-radius:10px;color:var(--muted)}.ftab.active{background:var(--accent2);color:var(--accent);font-weight:650}
+.fsub{display:none}.fsub.active{display:block}
+.habit-grid{display:flex;gap:4px;margin-top:8px}.habit-dot{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;background:var(--accent2);color:var(--muted)}.habit-dot-done{background:var(--accent);color:#fff;font-weight:700}.habit-dot-missed{background:#fee4e2;color:#b42318}[data-theme="dark"] .habit-dot-missed{background:#3a1f22;color:#fca5a5}.habit-dot-off{opacity:.35}.habit-dot-today{box-shadow:0 0 0 2px var(--accent)}
+.amt-income{color:#027a48}.amt-expense{color:#b42318}.amt-transfer{color:var(--accent)}[data-theme="dark"] .amt-income{color:#6ee7b7}[data-theme="dark"] .amt-expense{color:#fca5a5}
+.ai-item{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0;background:var(--bg)}.ai-item-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px}.ai-badge{flex:0 0 auto;font-size:11px;padding:3px 8px;border-radius:999px;background:var(--accent2);color:var(--accent);font-weight:650;text-transform:uppercase;letter-spacing:.03em;margin-top:2px}.ai-fields{display:grid;gap:6px;flex:1}.ai-fields input,.ai-fields select,.ai-fields textarea{padding:8px;font-size:13px}.ai-actions-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px}.ai-progress-text{font-size:12px;margin:6px 0 0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#111827;color:white;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:.2s;z-index:50}.toast.show{opacity:1}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 0}
+@media(max-width:750px){.app{padding:12px}.span-3,.span-4,.span-6,.span-8{grid-column:span 12}.header-actions .label{display:none}.brand h1{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div class="brand"><h1>My Life OS</h1><p id="dateLine"></p></div>
+  <div class="header-actions">
+    <button id="installBtn" class="btn primary" style="display:none">Install</button>
+    <button id="reminderBtn" class="iconbtn" title="Reminders" style="display:none">🔔</button>
+    <button class="iconbtn" id="themeToggle" title="Toggle dark mode">🌙</button>
+    <button class="btn" onclick="exportData()">Export</button>
+    <label class="btn" style="display:inline-flex;align-items:center">Import<input id="importFile" type="file" accept=".json" hidden></label>
+  </div>
+</header>
+
+<nav>
+  <button class="navbtn active" data-page="dashboard">🏠 Today</button>
+  <button class="navbtn" data-page="assistant">✨ Assistant</button>
+  <button class="navbtn" data-page="thoughts">🧠 Thoughts</button>
+  <button class="navbtn" data-page="tasks">✅ Tasks</button>
+  <button class="navbtn" data-page="goals">🎯 Goals</button>
+  <button class="navbtn" data-page="habits">🔁 Habits</button>
+  <button class="navbtn" data-page="finance">💰 Finance</button>
+  <button class="navbtn" data-page="review">📊 Review</button>
+  <button class="navbtn" data-page="search">🔎 Search</button>
+</nav>
+
+<section id="dashboard" class="page active">
+  <div class="grid">
+    <div class="card span-3"><div class="muted">Open tasks</div><div class="stat" id="statTasks">0</div></div>
+    <div class="card span-3"><div class="muted">Active goals</div><div class="stat" id="statGoals">0</div></div>
+    <div class="card span-3"><div class="muted">Thoughts captured</div><div class="stat" id="statThoughts">0</div></div>
+    <div class="card span-3"><div class="muted">Balance</div><div class="stat" id="statBalance">0</div></div>
+    <div class="card span-8">
+      <div class="section-title"><h2>Quick capture</h2></div>
+      <form id="quickForm"><textarea id="quickText" placeholder="What's on your mind? Capture it without organizing it first."></textarea><button class="btn primary">Save thought</button></form>
+    </div>
+    <div class="card span-4">
+      <div class="section-title"><h2>Quick task</h2></div>
+      <form id="quickTaskForm"><input id="quickTask" placeholder="e.g. Review lecture notes"><select id="quickPriority"><option>Medium</option><option>High</option><option>Low</option></select><button class="btn primary">Add task</button></form>
+    </div>
+    <div class="card span-4"><div class="section-title"><h2>Today's tasks</h2><button class="btn small" onclick="showPage('tasks')">View all</button></div><div id="todayTasks"></div></div>
+    <div class="card span-4"><div class="section-title"><h2>Active goals</h2><button class="btn small" onclick="showPage('goals')">View all</button></div><div id="todayGoals"></div></div>
+    <div class="card span-4"><div class="section-title"><h2>Today's habits</h2><button class="btn small" onclick="showPage('habits')">View all</button></div><div id="todayHabits"></div></div>
+  </div>
+</section>
+
+<section id="thoughts" class="page">
+  <div class="grid">
+    <div class="card span-4"><div class="section-title"><h2>New thought</h2></div>
+      <form id="thoughtForm"><input id="thoughtTitle" placeholder="Title (optional)"><textarea id="thoughtBody" placeholder="Write anything..."></textarea><input id="thoughtTags" placeholder="Tags, separated by commas"><button class="btn primary">Capture thought</button></form>
+    </div>
+    <div class="card span-8"><div class="section-title"><h2>Thoughts</h2><span class="muted" id="thoughtCount"></span></div><div id="thoughtList"></div></div>
+  </div>
+</section>
+
+<section id="tasks" class="page">
+  <div class="grid">
+    <div class="card span-4"><div class="section-title"><h2>New task</h2></div>
+      <form id="taskForm">
+        <input id="taskTitle" placeholder="Task" required>
+        <div class="row"><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select><input id="taskDue" type="date"></div>
+        <div class="row">
+          <select id="taskRecurrence"><option value="">Does not repeat</option><option value="daily">Repeats daily</option><option value="weekly">Repeats weekly</option><option value="monthly">Repeats monthly</option></select>
+          <select id="taskGoal"><option value="">No goal</option></select>
+        </div>
+        <input id="taskTags" placeholder="Tags, separated by commas"><button class="btn primary">Add task</button>
+      </form>
+    </div>
+    <div class="card span-8">
+      <div class="section-title"><h2>All tasks</h2><button class="btn small danger" onclick="clearCompleted()">Clear completed</button></div>
+      <div class="filterbar">
+        <select id="filterStatus"><option value="all">All statuses</option><option value="open">Open</option><option value="done">Done</option></select>
+        <select id="filterPriority"><option value="all">All priorities</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select>
+        <select id="filterTag"><option value="">All tags</option></select>
+        <select id="filterSort"><option value="due">Sort: due date</option><option value="priority">Sort: priority</option><option value="new">Sort: newest</option></select>
+      </div>
+      <div id="taskList"></div>
+    </div>
+  </div>
+</section>
+
+<section id="goals" class="page">
+  <div class="grid">
+    <div class="card span-4"><div class="section-title"><h2>New goal</h2></div>
+      <form id="goalForm"><input id="goalTitle" placeholder="Goal" required><input id="goalDeadline" type="date"><input id="goalTags" placeholder="Tags, separated by commas"><button class="btn primary">Create goal</button></form>
+    </div>
+    <div class="card span-8"><div class="section-title"><h2>Goals</h2></div><div id="goalList"></div></div>
+  </div>
+</section>
+
+<section id="habits" class="page">
+  <div class="grid">
+    <div class="card span-4">
+      <div class="section-title"><h2>New habit</h2></div>
+      <form id="habitForm">
+        <input id="habitName" placeholder="Habit, e.g. Drink water" required>
+        <div class="muted" style="font-size:12px">Repeats on</div>
+        <div class="checkrow">
+          <label><input type="checkbox" class="habitDayChk" value="0" checked>Su</label>
+          <label><input type="checkbox" class="habitDayChk" value="1" checked>Mo</label>
+          <label><input type="checkbox" class="habitDayChk" value="2" checked>Tu</label>
+          <label><input type="checkbox" class="habitDayChk" value="3" checked>We</label>
+          <label><input type="checkbox" class="habitDayChk" value="4" checked>Th</label>
+          <label><input type="checkbox" class="habitDayChk" value="5" checked>Fr</label>
+          <label><input type="checkbox" class="habitDayChk" value="6" checked>Sa</label>
+        </div>
+        <input id="habitTags" placeholder="Tags, separated by commas">
+        <button class="btn primary">Add habit</button>
+      </form>
+    </div>
+    <div class="card span-8"><div class="section-title"><h2>Habits</h2></div><div id="habitList"></div></div>
+  </div>
+</section>
+
+<section id="finance" class="page">
+  <div class="financetabs">
+    <button class="ftab active" data-ftab="overview">Overview</button>
+    <button class="ftab" data-ftab="transactions">Transactions</button>
+    <button class="ftab" data-ftab="accounts">Accounts</button>
+    <button class="ftab" data-ftab="categories">Categories</button>
+  </div>
+
+  <div id="fin-overview" class="fsub active">
+    <div class="grid">
+      <div class="card span-4"><div class="muted">Total balance</div><div class="stat" id="finTotalBalance">—</div></div>
+      <div class="card span-4"><div class="muted">This month income</div><div class="stat amt-income" id="finMonthIncome">—</div></div>
+      <div class="card span-4"><div class="muted">This month expenses</div><div class="stat amt-expense" id="finMonthExpense">—</div></div>
+      <div class="card span-6">
+        <div class="section-title"><h2>Quick add</h2></div>
+        <form id="quickTxForm">
+          <div class="row"><select id="quickTxType"><option value="expense">Expense</option><option value="income">Income</option></select><input id="quickTxAmount" type="number" step="0.01" min="0.01" placeholder="Amount" required></div>
+          <input id="quickTxNotes" placeholder="e.g. Lunch, Taxi, Salary">
+          <button class="btn primary">Add</button>
+        </form>
+        <p class="muted" id="quickTxHint" style="font-size:12px;margin-top:4px"></p>
+      </div>
+      <div class="card span-6"><div class="section-title"><h2>Account balances</h2></div><div id="finAccountBalances"></div></div>
+      <div class="card span-6"><div class="section-title"><h2>Spending by category — this month</h2></div><div id="finCategoryBreakdown"></div></div>
+      <div class="card span-6"><div class="section-title"><h2>Insights</h2></div><div id="finInsights"></div></div>
+    </div>
+  </div>
+
+  <div id="fin-transactions" class="fsub">
+    <div class="grid">
+      <div class="card span-4">
+        <div class="section-title"><h2>New transaction</h2></div>
+        <form id="txForm">
+          <select id="txType"><option value="expense">Expense</option><option value="income">Income</option><option value="transfer">Transfer</option></select>
+          <div class="row"><input id="txAmount" type="number" step="0.01" min="0.01" placeholder="Amount" required><input id="txDate" type="date"></div>
+          <div id="txCategoryRow"><select id="txCategory"></select></div>
+          <div class="muted" id="txAccountLabelWrap" style="font-size:12px">Account</div>
+          <div class="row"><select id="txAccount"></select><div id="txToAccountRow" style="display:none;flex:1"><select id="txToAccount"></select></div></div>
+          <input id="txNotes" placeholder="Notes (e.g. Lunch)">
+          <div class="muted" id="txAutoHint" style="font-size:12px"></div>
+          <button class="btn primary">Add transaction</button>
+        </form>
+      </div>
+      <div class="card span-8">
+        <div class="section-title"><h2>Transactions</h2></div>
+        <div class="filterbar">
+          <select id="txFilterType"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option><option value="transfer">Transfer</option></select>
+          <select id="txFilterAccount"><option value="">All accounts</option></select>
+          <select id="txFilterCategory"><option value="">All categories</option></select>
+          <select id="txFilterPeriod"><option value="all">All time</option><option value="thisMonth">This month</option><option value="lastMonth">Last month</option></select>
+        </div>
+        <div id="txList"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="fin-accounts" class="fsub">
+    <div class="grid">
+      <div class="card span-12" style="padding:12px 16px">
+        <div class="row" style="align-items:center;gap:10px">
+          <span class="muted" style="flex:0 0 auto">Currency symbol</span>
+          <input id="currencyInput" style="max-width:100px" maxlength="5">
+        </div>
+      </div>
+      <div class="card span-4">
+        <div class="section-title"><h2>New account</h2></div>
+        <form id="accountForm">
+          <input id="accName" placeholder="Account name" required>
+          <select id="accType"><option value="cash">Cash</option><option value="mobile-money">Mobile Money</option><option value="bank">Bank account</option><option value="savings">Savings</option><option value="investment">Investment</option><option value="other">Other</option></select>
+          <input id="accBalance" type="number" step="0.01" placeholder="Starting balance (optional)">
+          <button class="btn primary">Add account</button>
+        </form>
+      </div>
+      <div class="card span-8"><div class="section-title"><h2>Accounts</h2></div><div id="accountList"></div></div>
+    </div>
+  </div>
+
+  <div id="fin-categories" class="fsub">
+    <div class="grid">
+      <div class="card span-4">
+        <div class="section-title"><h2>New category</h2></div>
+        <form id="categoryForm">
+          <input id="catName" placeholder="Category name" required>
+          <select id="catType"><option value="expense">Expense</option><option value="income">Income</option></select>
+          <button class="btn primary">Add category</button>
+        </form>
+      </div>
+      <div class="card span-8"><div class="section-title"><h2>Categories</h2></div><div id="categoryList"></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="review" class="page">
+  <div class="card">
+    <div class="section-title">
+      <h2 id="reviewRangeLabel">This week</h2>
+      <div class="row" style="flex:0 0 auto;gap:6px">
+        <button class="iconbtn small" onclick="reviewNav(-1)">←</button>
+        <select id="reviewMode" style="width:auto"><option value="week">Weekly</option><option value="month">Monthly</option></select>
+        <button class="iconbtn small" onclick="reviewNav(1)">→</button>
+      </div>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:14px">
+    <div class="card span-3"><div class="muted">Tasks completed</div><div class="stat" id="revTasksDone">0</div></div>
+    <div class="card span-3"><div class="muted">Habit completion</div><div class="stat" id="revHabitRate">—</div></div>
+    <div class="card span-3"><div class="muted">Net (income − expenses)</div><div class="stat" id="revNet">—</div></div>
+    <div class="card span-3"><div class="muted">Thoughts captured</div><div class="stat" id="revThoughts">0</div></div>
+    <div class="card span-6"><div class="section-title"><h2>Top spending categories</h2></div><div id="revCategories"></div></div>
+    <div class="card span-6"><div class="section-title"><h2>Habit streaks</h2></div><div id="revHabits"></div></div>
+    <div class="card span-12"><div class="section-title"><h2>Goals in progress</h2></div><div id="revGoals"></div></div>
+  </div>
+</section>
+
+<section id="assistant" class="page">
+  <div class="grid">
+    <div class="card span-12">
+      <div class="section-title"><h2>✨ AI Assistant</h2></div>
+      <p class="muted" id="aiStatusText"></p>
+      <div id="aiEnableBlock">
+        <div class="row">
+          <select id="aiModelSelect">
+            <option value="fast">Fast — Qwen2.5 0.5B (~950MB download)</option>
+            <option value="balanced">Balanced — Qwen2.5 1.5B (~1.6GB download)</option>
+          </select>
+          <button class="btn primary" id="aiEnableBtn">Enable AI</button>
+        </div>
+        <div class="progress" id="aiProgressWrap" style="display:none"><div id="aiProgressBar" style="width:0%"></div></div>
+        <p class="muted ai-progress-text" id="aiProgressText"></p>
+      </div>
+      <div id="aiUnsupportedBlock" style="display:none"><div class="empty">This browser/device doesn't support WebGPU, so on-device AI can't run here. Everything else in the app is unaffected.</div></div>
+    </div>
+
+    <div class="card span-12" id="aiBrainDumpCard" style="display:none">
+      <div class="section-title"><h2>Brain dump</h2><span class="muted" id="aiModelBadge"></span></div>
+      <form id="brainDumpForm">
+        <textarea id="brainDumpText" placeholder="Dump everything on your mind — tasks, ideas, goals, worries. The AI will sort it into thoughts, tasks and goals for you to review." style="min-height:130px"></textarea>
+        <button class="btn primary" id="brainDumpBtn">Organize with AI</button>
+      </form>
+      <div id="brainDumpPreview"></div>
+    </div>
+  </div>
+</section>
+
+<section id="search" class="page">
+  <div class="card">
+    <div class="searchbar"><input id="searchInput" placeholder="Search thoughts, tasks and goals..."></div>
+    <div class="checkrow">
+      <label><input type="checkbox" id="searchThoughts" checked> Thoughts</label>
+      <label><input type="checkbox" id="searchTasks" checked> Tasks</label>
+      <label><input type="checkbox" id="searchGoals" checked> Goals</label>
+    </div>
+    <div id="searchResults"></div>
+  </div>
+</section>
+
+<footer>V4 • Offline-first • Installable • Habits • Weekly review • Reminders • AI Assistant (on-device) • Your data is stored in this browser on this device.</footer>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+const KEY='myLifeOS_v1'; // unchanged on purpose: existing V1/V2 data carries over
+const THEME_KEY='myLifeOS_theme';
+let db=JSON.parse(localStorage.getItem(KEY)||'{"thoughts":[],"tasks":[],"goals":[]}');
+let editingIds=new Set();
+let taskFilters={status:'all',priority:'all',tag:'',sort:'due'};
+let txFilters={type:'all',accountId:'',categoryId:'',period:'all'};
+let searchFilters={thoughts:true,tasks:true,goals:true};
+let categoryTouched=false;
+const $=id=>document.getElementById(id);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const today=()=>new Date().toISOString().slice(0,10);
+
+// --- migration: backfill new fields so old data still works ---
+function migrate(){
+  db.thoughts=(db.thoughts||[]).map(t=>({tags:[],taskId:null,...t}));
+  db.tasks=(db.tasks||[]).map(t=>({tags:[],recurrence:null,goalId:'',thoughtId:null,completedAt:null,...t}));
+  db.goals=(db.goals||[]).map(g=>({tags:[],progress:0,...g}));
+  db.accounts=db.accounts||[];
+  db.categories=db.categories||[];
+  db.transactions=(db.transactions||[]).map(t=>({notes:'',...t}));
+  db.habits=(db.habits||[]).map(h=>({tags:[],log:[],days:[],...h}));
+  db.settings=db.settings||{};
+  db.settings.currency=db.settings.currency||'GH₵';
+  db.settings.remindersEnabled=db.settings.remindersEnabled??false;
+  db.settings.aiModelKey=db.settings.aiModelKey||null;
+  if(!db.financeSeeded){
+    if(db.accounts.length===0){
+      db.accounts=[
+        {id:uid(),name:'Cash',type:'cash',startingBalance:0,created:Date.now()},
+        {id:uid(),name:'Mobile Money',type:'mobile-money',startingBalance:0,created:Date.now()},
+        {id:uid(),name:'Bank Account',type:'bank',startingBalance:0,created:Date.now()}
+      ];
+    }
+    if(db.categories.length===0){
+      const exp=['Food','Transport','Education','Healthcare','Family','Entertainment','Bills','Shopping','Business','Savings','Investments','Other'];
+      const inc=['Salary','Business','Gifts','Other'];
+      db.categories=[
+        ...exp.map(n=>({id:uid(),name:n,type:'expense',created:Date.now()})),
+        ...inc.map(n=>({id:uid(),name:n,type:'income',created:Date.now()}))
+      ];
+    }
+    db.financeSeeded=true;
+  }
+}
+migrate();
+
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render();}
+function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+function tags(s){return (s||'').split(',').map(x=>x.trim()).filter(Boolean)}
+function tagHtml(a){return (a||[]).map(x=>`<span class="tag">#${esc(x)}</span>`).join('')}
+function fmt(n){const c=db.settings.currency||'GH₵';const v=Number(n||0);return `${v<0?'-':''}${c}${Math.abs(v).toFixed(2)}`}
+function showPage(page){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('.navbtn').forEach(x=>x.classList.toggle('active',x.dataset.page===page));render()}
+document.querySelectorAll('.navbtn').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+document.querySelectorAll('.ftab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.ftab').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.fsub').forEach(x=>x.classList.toggle('active',x.id==='fin-'+b.dataset.ftab));renderFinance()});
+
+$('dateLine').textContent=new Intl.DateTimeFormat(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'}).format(new Date());
+
+// --- theme ---
+function applyTheme(t){document.documentElement.dataset.theme=t;$('themeToggle').textContent=t==='dark'?'☀️':'🌙';localStorage.setItem(THEME_KEY,t)}
+applyTheme(localStorage.getItem(THEME_KEY)||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+$('themeToggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark');
+
+// --- capture forms (thoughts/tasks/goals) ---
+$('quickForm').onsubmit=e=>{e.preventDefault();let body=$('quickText').value.trim();if(!body)return;db.thoughts.unshift({id:uid(),title:'',body,tags:[],created:Date.now(),taskId:null});$('quickText').value='';save();toast('Thought captured')};
+$('quickTaskForm').onsubmit=e=>{e.preventDefault();let title=$('quickTask').value.trim();if(!title)return;db.tasks.unshift({id:uid(),title,priority:$('quickPriority').value,due:today(),tags:[],done:false,created:Date.now(),recurrence:null,goalId:'',thoughtId:null,completedAt:null});$('quickTask').value='';save();toast('Task added')};
+$('thoughtForm').onsubmit=e=>{e.preventDefault();db.thoughts.unshift({id:uid(),title:$('thoughtTitle').value.trim(),body:$('thoughtBody').value.trim(),tags:tags($('thoughtTags').value),created:Date.now(),taskId:null});e.target.reset();save();toast('Thought captured')};
+$('taskForm').onsubmit=e=>{e.preventDefault();const fr=$('taskRecurrence').value;db.tasks.unshift({id:uid(),title:$('taskTitle').value.trim(),priority:$('taskPriority').value,due:$('taskDue').value,tags:tags($('taskTags').value),done:false,created:Date.now(),recurrence:fr?{freq:fr}:null,goalId:$('taskGoal').value||'',thoughtId:null,completedAt:null});e.target.reset();save();toast('Task added')};
+$('goalForm').onsubmit=e=>{e.preventDefault();db.goals.unshift({id:uid(),title:$('goalTitle').value.trim(),deadline:$('goalDeadline').value,tags:tags($('goalTags').value),progress:0,created:Date.now()});e.target.reset();save();toast('Goal created')};
+$('searchInput').oninput=renderSearch;
+['searchThoughts','searchTasks','searchGoals'].forEach(id=>$(id).onchange=()=>{searchFilters={thoughts:$('searchThoughts').checked,tasks:$('searchTasks').checked,goals:$('searchGoals').checked};renderSearch()});
+['filterStatus','filterPriority','filterTag','filterSort'].forEach(id=>$(id).onchange=()=>{taskFilters={status:$('filterStatus').value,priority:$('filterPriority').value,tag:$('filterTag').value,sort:$('filterSort').value};render()});
+
+// --- recurring task logic ---
+function nextDue(dueStr,freq){
+  let d=dueStr?new Date(dueStr+'T00:00:00'):new Date();
+  if(freq==='daily')d.setDate(d.getDate()+1);
+  else if(freq==='weekly')d.setDate(d.getDate()+7);
+  else if(freq==='monthly')d.setMonth(d.getMonth()+1);
+  return d.toISOString().slice(0,10);
+}
+function toggleTask(id){
+  let x=db.tasks.find(t=>t.id===id);if(!x)return;
+  const wasDone=x.done;x.done=!x.done;
+  if(!wasDone&&x.done){
+    x.completedAt=Date.now();
+    if(x.recurrence){
+      const nd=nextDue(x.due,x.recurrence.freq);
+      db.tasks.unshift({...x,id:uid(),done:false,due:nd,created:Date.now(),completedAt:null});
+      toast('Completed — next one repeats '+nd);
+    }
+  }
+  save();
+}
+function deleteItem(type,id){db[type]=db[type].filter(x=>x.id!==id);editingIds.delete(id);save();toast('Deleted')}
+function setProgress(id,v){let x=db.goals.find(x=>x.id===id);if(x){x.progress=Math.max(0,Math.min(100,+v));save()}}
+function clearCompleted(){db.tasks=db.tasks.filter(x=>!x.done);save();toast('Completed tasks cleared')}
+
+// --- linking: thought -> task ---
+function convertThought(id){
+  const t=db.thoughts.find(x=>x.id===id);if(!t||t.taskId)return;
+  const title=(t.title||t.body.split('\n')[0]||'Untitled').slice(0,80);
+  const task={id:uid(),title,priority:'Medium',due:today(),tags:[...(t.tags||[])],done:false,created:Date.now(),recurrence:null,goalId:'',thoughtId:t.id,completedAt:null};
+  db.tasks.unshift(task);t.taskId=task.id;save();toast('Turned into a task');
+}
+
+// --- editing: thoughts/tasks/goals ---
+function startEdit(id){editingIds.add(id);render()}
+function cancelEdit(id){editingIds.delete(id);render()}
+
+function thoughtEditForm(x){
+  return `<div class="item"><form onsubmit="return saveThoughtEdit(event,'${x.id}')">
+    <input name="title" value="${esc(x.title)}" placeholder="Title (optional)">
+    <textarea name="body" placeholder="Write anything...">${esc(x.body)}</textarea>
+    <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveThoughtEdit(e,id){e.preventDefault();const f=e.target;const t=db.thoughts.find(x=>x.id===id);if(t){t.title=f.title.value.trim();t.body=f.body.value.trim();t.tags=tags(f.tags.value);}editingIds.delete(id);save();toast('Thought updated');return false;}
+
+function taskEditForm(x){
+  const goalOptions=db.goals.map(g=>`<option value="${g.id}" ${x.goalId===g.id?'selected':''}>${esc(g.title)}</option>`).join('');
+  const freq=x.recurrence?x.recurrence.freq:'';
+  return `<div class="item"><form onsubmit="return saveTaskEdit(event,'${x.id}')">
+    <input name="title" value="${esc(x.title)}" required>
+    <div class="row">
+      <select name="priority"><option ${x.priority==='Medium'?'selected':''}>Medium</option><option ${x.priority==='High'?'selected':''}>High</option><option ${x.priority==='Low'?'selected':''}>Low</option></select>
+      <input name="due" type="date" value="${x.due||''}">
+    </div>
+    <div class="row">
+      <select name="recurrence"><option value="" ${freq===''?'selected':''}>Does not repeat</option><option value="daily" ${freq==='daily'?'selected':''}>Repeats daily</option><option value="weekly" ${freq==='weekly'?'selected':''}>Repeats weekly</option><option value="monthly" ${freq==='monthly'?'selected':''}>Repeats monthly</option></select>
+      <select name="goalId"><option value="">No goal</option>${goalOptions}</select>
+    </div>
+    <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveTaskEdit(e,id){e.preventDefault();const f=e.target;const x=db.tasks.find(t=>t.id===id);if(x){x.title=f.title.value.trim();x.priority=f.priority.value;x.due=f.due.value;x.tags=tags(f.tags.value);x.goalId=f.goalId.value||'';const fr=f.recurrence.value;x.recurrence=fr?{freq:fr}:null;}editingIds.delete(id);save();toast('Task updated');return false;}
+
+function goalEditForm(x){
+  return `<div class="item"><form onsubmit="return saveGoalEdit(event,'${x.id}')">
+    <input name="title" value="${esc(x.title)}" required>
+    <input name="deadline" type="date" value="${x.deadline||''}">
+    <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveGoalEdit(e,id){e.preventDefault();const f=e.target;const g=db.goals.find(x=>x.id===id);if(g){g.title=f.title.value.trim();g.deadline=f.deadline.value;g.tags=tags(f.tags.value);}editingIds.delete(id);save();toast('Goal updated');return false;}
+
+// --- item renderers: thoughts/tasks/goals ---
+function taskItem(x){
+  if(editingIds.has(x.id))return taskEditForm(x);
+  const goal=x.goalId?db.goals.find(g=>g.id===x.goalId):null;
+  const badges=[
+    x.due?`<span>Due ${esc(x.due)}</span>`:'',
+    tagHtml(x.tags),
+    x.recurrence?`<span class="tag">🔁 ${esc(x.recurrence.freq)}</span>`:'',
+    goal?`<span class="tag">🎯 ${esc(goal.title)}</span>`:'',
+    x.thoughtId?'<span class="tag">🧠 from a thought</span>':''
+  ].join('');
+  return `<div class="item"><div class="item-top"><div style="display:flex;gap:9px"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleTask('${x.id}')"><div><div class="item-title ${x.done?'done':''}">${esc(x.title)}</div><div class="meta"><span class="priority-${x.priority.toLowerCase()}">${esc(x.priority)}</span>${badges}</div></div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('tasks','${x.id}')">✕</button></div></div></div>`;
+}
+function goalItem(x){
+  if(editingIds.has(x.id))return goalEditForm(x);
+  const linked=db.tasks.filter(t=>t.goalId===x.id);
+  const linkedMeta=linked.length?`<span>${linked.filter(t=>t.done).length}/${linked.length} linked tasks done</span>`:'';
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.title)}</div><div class="meta">${x.deadline?`<span>Target ${esc(x.deadline)}</span>`:''}${linkedMeta}${tagHtml(x.tags)}</div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('goals','${x.id}')">✕</button></div></div><div class="progress"><div style="width:${x.progress}%"></div></div><div class="row" style="margin-top:8px"><input type="range" min="0" max="100" value="${x.progress}" oninput="setProgress('${x.id}',this.value)"><span class="muted" style="flex:0 0 40px;text-align:right">${x.progress}%</span></div></div>`;
+}
+function thoughtItem(x){
+  if(editingIds.has(x.id))return thoughtEditForm(x);
+  const convertBtn=x.taskId?'<span class="tag">✅ turned into a task</span>':`<button class="iconbtn small" onclick="convertThought('${x.id}')">→ Task</button>`;
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.title||'Untitled thought')}</div><div class="meta"><span>${new Date(x.created).toLocaleString()}</span>${tagHtml(x.tags)}</div></div><div class="actions">${convertBtn}<button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('thoughts','${x.id}')">✕</button></div></div><div class="item-body">${esc(x.body)}</div></div>`;
+}
+
+// --- task filtering ---
+function filteredTasks(){
+  return db.tasks.filter(x=>{
+    if(taskFilters.status==='open'&&x.done)return false;
+    if(taskFilters.status==='done'&&!x.done)return false;
+    if(taskFilters.priority!=='all'&&x.priority!==taskFilters.priority)return false;
+    if(taskFilters.tag&&!(x.tags||[]).includes(taskFilters.tag))return false;
+    return true;
+  }).sort((a,b)=>{
+    if(taskFilters.sort==='due')return (a.due||'9999-99-99').localeCompare(b.due||'9999-99-99');
+    if(taskFilters.sort==='priority'){const order={High:0,Medium:1,Low:2};return order[a.priority]-order[b.priority];}
+    return b.created-a.created;
+  });
+}
+function refreshFilterOptions(){
+  const tagSel=$('filterTag');const cur=taskFilters.tag;
+  const uniqueTags=[...new Set(db.tasks.flatMap(t=>t.tags||[]))].sort();
+  tagSel.innerHTML='<option value="">All tags</option>'+uniqueTags.map(t=>`<option value="${esc(t)}" ${t===cur?'selected':''}>#${esc(t)}</option>`).join('');
+  const goalSel=$('taskGoal');const curGoal=goalSel.value;
+  goalSel.innerHTML='<option value="">No goal</option>'+db.goals.map(g=>`<option value="${g.id}" ${g.id===curGoal?'selected':''}>${esc(g.title)}</option>`).join('');
+}
+
+// ============ HABITS ============
+function isHabitScheduled(h,dateStr){
+  if(!h.days||h.days.length===0||h.days.length===7)return true;
+  const dow=new Date(dateStr+'T00:00:00').getDay();
+  return h.days.includes(dow);
+}
+function toggleHabitToday(id){
+  const h=db.habits.find(x=>x.id===id);if(!h)return;
+  const d=today();const idx=h.log.indexOf(d);
+  if(idx>=0)h.log.splice(idx,1);else h.log.push(d);
+  save();
+}
+function habitStreak(h){
+  if(!h.log||!h.log.length)return 0;
+  let streak=0,cursor=new Date(),first=true,guard=0;
+  const createdD=new Date(h.created);
+  while(guard<730){
+    guard++;
+    const ds=cursor.toISOString().slice(0,10);
+    if(cursor<createdD)break;
+    const scheduled=isHabitScheduled(h,ds);
+    const done=h.log.includes(ds);
+    if(scheduled){
+      if(done)streak++;
+      else if(!(first&&ds===today()))break;
+    }
+    first=false;
+    cursor.setDate(cursor.getDate()-1);
+  }
+  return streak;
+}
+function last7Days(){const a=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);a.push(d.toISOString().slice(0,10));}return a;}
+function habitDotGrid(h){
+  return last7Days().map(ds=>{
+    const scheduled=isHabitScheduled(h,ds),done=h.log.includes(ds),isToday=ds===today();
+    let cls='habit-dot';
+    if(!scheduled)cls+=' habit-dot-off';else if(done)cls+=' habit-dot-done';else if(ds<today())cls+=' habit-dot-missed';
+    if(isToday)cls+=' habit-dot-today';
+    const label=new Date(ds+'T00:00:00').toLocaleDateString(undefined,{weekday:'narrow'});
+    return `<span class="${cls}" title="${ds}">${label}</span>`;
+  }).join('');
+}
+function habitFreqLabel(h){
+  if(!h.days||h.days.length===0||h.days.length===7)return 'Daily';
+  return h.days.map(d=>['Su','Mo','Tu','We','Th','Fr','Sa'][d]).join(' ');
+}
+$('habitForm').onsubmit=e=>{
+  e.preventDefault();
+  const name=$('habitName').value.trim();if(!name)return;
+  const checked=[...document.querySelectorAll('.habitDayChk:checked')].map(c=>+c.value);
+  db.habits.unshift({id:uid(),name,days:checked.length===7?[]:checked,tags:tags($('habitTags').value),log:[],created:Date.now()});
+  e.target.reset();
+  document.querySelectorAll('.habitDayChk').forEach(c=>c.checked=true);
+  save();toast('Habit added');
+};
+function habitEditForm(x){
+  const activeDays=(x.days&&x.days.length)?x.days:[0,1,2,3,4,5,6];
+  const dayNames=['Su','Mo','Tu','We','Th','Fr','Sa'];
+  const checks=dayNames.map((n,i)=>`<label style="display:inline-flex;gap:4px;align-items:center;margin-right:8px"><input type="checkbox" name="day${i}" ${activeDays.includes(i)?'checked':''}>${n}</label>`).join('');
+  return `<div class="item"><form onsubmit="return saveHabitEdit(event,'${x.id}')">
+    <input name="name" value="${esc(x.name)}" required>
+    <div style="display:flex;flex-wrap:wrap">${checks}</div>
+    <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveHabitEdit(e,id){
+  e.preventDefault();const f=e.target;const h=db.habits.find(x=>x.id===id);
+  if(h){
+    h.name=f.name.value.trim();
+    const days=[];for(let i=0;i<7;i++)if(f['day'+i].checked)days.push(i);
+    h.days=days.length===7?[]:days;
+    h.tags=tags(f.tags.value);
+  }
+  editingIds.delete(id);save();toast('Habit updated');return false;
+}
+function habitItem(x){
+  if(editingIds.has(x.id))return habitEditForm(x);
+  const doneToday=x.log.includes(today());
+  const scheduledToday=isHabitScheduled(x,today());
+  const streak=habitStreak(x);
+  return `<div class="item"><div class="item-top">
+    <div style="display:flex;gap:9px;align-items:flex-start">
+      <input class="check" type="checkbox" ${doneToday?'checked':''} ${scheduledToday?'':'disabled'} onchange="toggleHabitToday('${x.id}')">
+      <div><div class="item-title">${esc(x.name)}</div>
+      <div class="meta"><span class="tag">${esc(habitFreqLabel(x))}</span>${streak>0?`<span>🔥 ${streak} day streak</span>`:''}${tagHtml(x.tags)}</div>
+      <div class="habit-grid">${habitDotGrid(x)}</div></div>
+    </div>
+    <div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('habits','${x.id}')">✕</button></div>
+  </div></div>`;
+}
+// ============ END HABITS ============
+
+// ============ FINANCE ============
+const CATEGORY_KEYWORDS={
+  Food:['lunch','dinner','breakfast','food','restaurant','grocery','groceries','snack','eat','chop'],
+  Transport:['taxi','uber','bolt','trotro','tro-tro','bus','fuel','petrol','fare','transport','lorry'],
+  Education:['school','tuition','book','course','class','fees','exam'],
+  Healthcare:['hospital','clinic','doctor','medicine','drug','pharmacy','health','nurse'],
+  Family:['family','kids','children','mom','dad','sister','brother'],
+  Entertainment:['movie','netflix','game','fun','party','concert','music'],
+  Bills:['bill','electricity','water','rent','internet','subscription','light bill','dstv'],
+  Shopping:['shopping','clothes','shoes','mall','store','market'],
+  Business:['business','supplies','inventory','stock','wholesale']
+};
+function suggestCategory(note,type){
+  if(type!=='expense')return null;
+  const n=(note||'').toLowerCase();if(!n)return null;
+  for(const catName in CATEGORY_KEYWORDS){
+    if(CATEGORY_KEYWORDS[catName].some(k=>n.includes(k))){
+      const cat=db.categories.find(c=>c.name===catName&&c.type==='expense');
+      if(cat)return cat.id;
+    }
+  }
+  return null;
+}
+
+function accountBalance(accId){
+  const acc=db.accounts.find(a=>a.id===accId);
+  let bal=acc?Number(acc.startingBalance||0):0;
+  db.transactions.forEach(t=>{
+    if(t.type==='income'&&t.accountId===accId)bal+=Number(t.amount||0);
+    else if(t.type==='expense'&&t.accountId===accId)bal-=Number(t.amount||0);
+    else if(t.type==='transfer'){
+      if(t.accountId===accId)bal-=Number(t.amount||0);
+      if(t.toAccountId===accId)bal+=Number(t.amount||0);
+    }
+  });
+  return bal;
+}
+function totalBalance(){return db.accounts.reduce((s,a)=>s+accountBalance(a.id),0)}
+function monthBounds(offset){
+  const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+offset);
+  const start=d.toISOString().slice(0,10);
+  const end=new Date(d.getFullYear(),d.getMonth()+1,0).toISOString().slice(0,10);
+  return {start,end};
+}
+function inRange(dateStr,start,end){return dateStr&&dateStr>=start&&dateStr<=end}
+function sumForMonth(type,offset){
+  const {start,end}=monthBounds(offset);
+  return db.transactions.filter(t=>t.type===type&&inRange(t.date,start,end)).reduce((s,t)=>s+Number(t.amount||0),0);
+}
+function categoryBreakdown(offset){
+  const {start,end}=monthBounds(offset);
+  const map={};
+  db.transactions.filter(t=>t.type==='expense'&&inRange(t.date,start,end)).forEach(t=>{
+    const k=t.categoryId||'none';
+    map[k]=(map[k]||0)+Number(t.amount||0);
+  });
+  return Object.keys(map).map(catId=>({catId,total:map[catId],cat:db.categories.find(c=>c.id===catId)})).sort((a,b)=>b.total-a.total);
+}
+function insights(){
+  const list=[];
+  const cur=categoryBreakdown(0);
+  const avgMap={};
+  for(let i=1;i<=3;i++){categoryBreakdown(-i).forEach(({catId,total})=>{avgMap[catId]=(avgMap[catId]||0)+total});}
+  Object.keys(avgMap).forEach(k=>avgMap[k]/=3);
+  cur.forEach(({catId,total,cat})=>{
+    const avg=avgMap[catId]||0;
+    if(avg>0&&total>avg*1.3){
+      const pct=Math.round((total/avg-1)*100);
+      list.push(`⚠️ ${cat?esc(cat.name):'Uncategorized'} is ${pct}% above your 3-month average this month.`);
+    }
+  });
+  const income=sumForMonth('income',0),expense=sumForMonth('expense',0);
+  if(income>0&&expense>income)list.push('📉 You have spent more than you earned this month.');
+  if(!list.length)list.push('No unusual spending detected this month. ✅');
+  return list;
+}
+
+// --- transaction form behavior ---
+function populateTxFormOptions(){
+  const type=$('txType').value;
+  const filtered=db.categories.filter(c=>c.type===(type==='income'?'income':'expense'));
+  const curCat=$('txCategory').value;
+  $('txCategory').innerHTML=filtered.map(c=>`<option value="${c.id}" ${c.id===curCat?'selected':''}>${esc(c.name)}</option>`).join('');
+  // Mark the chosen option with the HTML `selected` attribute (not just .value) so that
+  // a native form.reset() restores the true prior selection instead of drifting to
+  // whichever account happens to be first after accounts are added/reordered.
+  const curAcc=$('txAccount').value||(db.accounts[0]?db.accounts[0].id:'');
+  const fallbackTo=db.accounts.find(a=>a.id!==curAcc)||db.accounts[0];
+  const curToAcc=$('txToAccount').value||(fallbackTo?fallbackTo.id:'');
+  const accOptsFor=sel=>db.accounts.map(a=>`<option value="${a.id}" ${a.id===sel?'selected':''}>${esc(a.name)}</option>`).join('');
+  $('txAccount').innerHTML=accOptsFor(curAcc);
+  $('txToAccount').innerHTML=accOptsFor(curToAcc);
+  $('txCategoryRow').style.display=type==='transfer'?'none':'block';
+  $('txToAccountRow').style.display=type==='transfer'?'block':'none';
+  $('txAccountLabelWrap').textContent=type==='transfer'?'From account → To account':'Account';
+}
+$('txType').onchange=()=>{categoryTouched=false;$('txAutoHint').textContent='';populateTxFormOptions();};
+$('txCategory').onchange=()=>{categoryTouched=true;$('txAutoHint').textContent='';};
+$('txNotes').oninput=()=>{
+  if(categoryTouched)return;
+  const sugg=suggestCategory($('txNotes').value,$('txType').value);
+  if(sugg){$('txCategory').value=sugg;$('txAutoHint').textContent='Auto-categorized — change if needed';}
+};
+$('txForm').onsubmit=e=>{
+  e.preventDefault();
+  if(!db.accounts.length){toast('Add an account first');return;}
+  const type=$('txType').value;
+  const amount=parseFloat($('txAmount').value);
+  if(!amount||amount<=0){toast('Enter a valid amount');return;}
+  const accountId=$('txAccount').value,toAccountId=$('txToAccount').value;
+  if(type==='transfer'&&accountId===toAccountId){toast('Choose two different accounts');return;}
+  db.transactions.unshift({id:uid(),type,date:$('txDate').value||today(),amount,categoryId:type==='transfer'?null:($('txCategory').value||null),accountId,toAccountId:type==='transfer'?toAccountId:null,notes:$('txNotes').value.trim(),created:Date.now()});
+  e.target.reset();categoryTouched=false;$('txDate').value=today();
+  populateTxFormOptions();save();toast('Transaction added');
+};
+$('quickTxForm').onsubmit=e=>{
+  e.preventDefault();
+  if(!db.accounts.length){toast('Add an account first');return;}
+  const amount=parseFloat($('quickTxAmount').value);
+  if(!amount||amount<=0){toast('Enter a valid amount');return;}
+  const type=$('quickTxType').value,notes=$('quickTxNotes').value.trim();
+  const accountId=db.accounts[0].id;
+  const categoryId=suggestCategory(notes,type)||(db.categories.find(c=>c.type===type)?.id||null);
+  db.transactions.unshift({id:uid(),type,date:today(),amount,categoryId,accountId,toAccountId:null,notes,created:Date.now()});
+  e.target.reset();save();toast('Transaction added');
+};
+
+function txEditForm(x){
+  const catOptions=db.categories.filter(c=>c.type===(x.type==='income'?'income':'expense')).map(c=>`<option value="${c.id}" ${c.id===x.categoryId?'selected':''}>${esc(c.name)}</option>`).join('');
+  const accOptions=db.accounts.map(a=>`<option value="${a.id}" ${a.id===x.accountId?'selected':''}>${esc(a.name)}</option>`).join('');
+  const toAccOptions=db.accounts.map(a=>`<option value="${a.id}" ${a.id===x.toAccountId?'selected':''}>${esc(a.name)}</option>`).join('');
+  return `<div class="item"><form onsubmit="return saveTxEdit(event,'${x.id}')">
+    <div class="row"><input name="amount" type="number" step="0.01" min="0.01" value="${x.amount}" required><input name="date" type="date" value="${x.date||''}"></div>
+    ${x.type!=='transfer'?`<select name="categoryId">${catOptions}</select>`:''}
+    <div class="row"><select name="accountId">${accOptions}</select>${x.type==='transfer'?`<select name="toAccountId">${toAccOptions}</select>`:''}</div>
+    <input name="notes" value="${esc(x.notes||'')}" placeholder="Notes">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveTxEdit(e,id){
+  e.preventDefault();const f=e.target;const x=db.transactions.find(t=>t.id===id);
+  if(x){
+    x.amount=parseFloat(f.amount.value)||x.amount;
+    x.date=f.date.value;
+    if(f.categoryId)x.categoryId=f.categoryId.value;
+    x.accountId=f.accountId.value;
+    if(f.toAccountId)x.toAccountId=f.toAccountId.value;
+    x.notes=f.notes.value.trim();
+  }
+  editingIds.delete(id);save();toast('Transaction updated');return false;
+}
+function txItem(x){
+  if(editingIds.has(x.id))return txEditForm(x);
+  const acc=db.accounts.find(a=>a.id===x.accountId);
+  const toAcc=x.toAccountId?db.accounts.find(a=>a.id===x.toAccountId):null;
+  const cat=x.categoryId?db.categories.find(c=>c.id===x.categoryId):null;
+  const cls=x.type==='income'?'amt-income':x.type==='expense'?'amt-expense':'amt-transfer';
+  const sign=x.type==='income'?'+':x.type==='expense'?'-':'';
+  const icon=x.type==='income'?'💵':x.type==='expense'?'💸':'🔁';
+  const desc=x.type==='transfer'?`${acc?esc(acc.name):'?'} → ${toAcc?esc(toAcc.name):'?'}`:`${cat?esc(cat.name):'Uncategorized'} · ${acc?esc(acc.name):'?'}`;
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${icon} ${desc}</div><div class="meta"><span>${esc(x.date||'')}</span>${x.notes?`<span>${esc(x.notes)}</span>`:''}</div></div><div style="text-align:right"><div class="${cls}" style="font-weight:700">${sign}${fmt(x.amount)}</div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('transactions','${x.id}')">✕</button></div></div></div></div>`;
+}
+function inPeriod(dateStr,period){
+  if(period==='all')return true;
+  const offset=period==='lastMonth'?-1:0;
+  const {start,end}=monthBounds(offset);
+  return inRange(dateStr,start,end);
+}
+function filteredTransactions(){
+  return db.transactions.filter(t=>{
+    if(txFilters.type!=='all'&&t.type!==txFilters.type)return false;
+    if(txFilters.accountId&&t.accountId!==txFilters.accountId&&t.toAccountId!==txFilters.accountId)return false;
+    if(txFilters.categoryId&&t.categoryId!==txFilters.categoryId)return false;
+    if(!inPeriod(t.date,txFilters.period))return false;
+    return true;
+  }).sort((a,b)=>(b.date||'').localeCompare(a.date||'')||b.created-a.created);
+}
+function refreshTxFilterOptions(){
+  const accSel=$('txFilterAccount');const curAcc=txFilters.accountId;
+  accSel.innerHTML='<option value="">All accounts</option>'+db.accounts.map(a=>`<option value="${a.id}" ${a.id===curAcc?'selected':''}>${esc(a.name)}</option>`).join('');
+  const catSel=$('txFilterCategory');const curCat=txFilters.categoryId;
+  catSel.innerHTML='<option value="">All categories</option>'+db.categories.map(c=>`<option value="${c.id}" ${c.id===curCat?'selected':''}>${esc(c.name)}</option>`).join('');
+}
+['txFilterType','txFilterAccount','txFilterCategory','txFilterPeriod'].forEach(id=>$(id).onchange=()=>{txFilters={type:$('txFilterType').value,accountId:$('txFilterAccount').value,categoryId:$('txFilterCategory').value,period:$('txFilterPeriod').value};renderFinance()});
+
+// --- accounts CRUD ---
+$('accountForm').onsubmit=e=>{e.preventDefault();db.accounts.unshift({id:uid(),name:$('accName').value.trim(),type:$('accType').value,startingBalance:parseFloat($('accBalance').value)||0,created:Date.now()});e.target.reset();save();toast('Account added')};
+function accountEditForm(x){
+  const types=['cash','mobile-money','bank','savings','investment','other'];
+  return `<div class="item"><form onsubmit="return saveAccountEdit(event,'${x.id}')">
+    <input name="name" value="${esc(x.name)}" required>
+    <select name="type">${types.map(t=>`<option value="${t}" ${x.type===t?'selected':''}>${t.replace('-',' ')}</option>`).join('')}</select>
+    <input name="startingBalance" type="number" step="0.01" value="${x.startingBalance||0}">
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveAccountEdit(e,id){e.preventDefault();const f=e.target;const a=db.accounts.find(x=>x.id===id);if(a){a.name=f.name.value.trim();a.type=f.type.value;a.startingBalance=parseFloat(f.startingBalance.value)||0;}editingIds.delete(id);save();toast('Account updated');return false;}
+function accountItem(x){
+  if(editingIds.has(x.id))return accountEditForm(x);
+  const bal=accountBalance(x.id);
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.name)}</div><div class="meta"><span class="tag">${esc(x.type.replace('-',' '))}</span></div></div><div style="text-align:right"><div style="font-weight:700">${fmt(bal)}</div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('accounts','${x.id}')">✕</button></div></div></div></div>`;
+}
+
+// --- categories CRUD ---
+$('categoryForm').onsubmit=e=>{e.preventDefault();db.categories.unshift({id:uid(),name:$('catName').value.trim(),type:$('catType').value,created:Date.now()});e.target.reset();save();toast('Category added')};
+function categoryEditForm(x){
+  return `<div class="item"><form onsubmit="return saveCategoryEdit(event,'${x.id}')">
+    <input name="name" value="${esc(x.name)}" required>
+    <select name="type"><option value="expense" ${x.type==='expense'?'selected':''}>Expense</option><option value="income" ${x.type==='income'?'selected':''}>Income</option></select>
+    <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
+  </form></div>`;
+}
+function saveCategoryEdit(e,id){e.preventDefault();const f=e.target;const c=db.categories.find(x=>x.id===id);if(c){c.name=f.name.value.trim();c.type=f.type.value;}editingIds.delete(id);save();toast('Category updated');return false;}
+function categoryItem(x){
+  if(editingIds.has(x.id))return categoryEditForm(x);
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.name)}</div><div class="meta"><span class="tag">${x.type==='income'?'Income':'Expense'}</span></div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('categories','${x.id}')">✕</button></div></div></div>`;
+}
+
+$('currencyInput').oninput=()=>{db.settings.currency=$('currencyInput').value||'GH₵';save()};
+
+function renderFinance(){
+  $('finTotalBalance').textContent=fmt(totalBalance());
+  $('finMonthIncome').textContent=fmt(sumForMonth('income',0));
+  $('finMonthExpense').textContent=fmt(sumForMonth('expense',0));
+  $('quickTxHint').textContent=db.accounts.length?`Logged to ${db.accounts[0].name} · open Transactions for more options`:'Add an account first';
+  $('finAccountBalances').innerHTML=db.accounts.length?db.accounts.map(a=>`<div class="item"><div class="item-top"><div class="item-title">${esc(a.name)}</div><div style="font-weight:700">${fmt(accountBalance(a.id))}</div></div></div>`).join(''):'<div class="empty">Add an account to get started.</div>';
+  const bd=categoryBreakdown(0);
+  const maxV=bd.length?bd[0].total:0;
+  $('finCategoryBreakdown').innerHTML=bd.length?bd.map(({cat,total})=>`<div style="margin:8px 0"><div class="meta" style="justify-content:space-between"><span>${cat?esc(cat.name):'Uncategorized'}</span><span>${fmt(total)}</span></div><div class="progress"><div style="width:${maxV?Math.round(total/maxV*100):0}%"></div></div></div>`).join(''):'<div class="empty">No expenses logged this month.</div>';
+  $('finInsights').innerHTML=insights().map(x=>`<div class="item">${x}</div>`).join('');
+  $('currencyInput').value=db.settings.currency;
+  populateTxFormOptions();
+  refreshTxFilterOptions();
+  const ft=filteredTransactions();
+  $('txList').innerHTML=ft.length?ft.map(txItem).join(''):(db.transactions.length?'<div class="empty">No transactions match these filters.</div>':'<div class="empty">No transactions yet.</div>');
+  $('accountList').innerHTML=db.accounts.length?db.accounts.map(accountItem).join(''):'<div class="empty">No accounts yet.</div>';
+  $('categoryList').innerHTML=db.categories.length?db.categories.map(categoryItem).join(''):'<div class="empty">No categories yet.</div>';
+}
+// ============ END FINANCE ============
+
+// ============ REVIEW ============
+let reviewMode='week',reviewOffset=0;
+$('reviewMode').onchange=()=>{reviewMode=$('reviewMode').value;reviewOffset=0;renderReview();};
+function reviewNav(dir){reviewOffset+=dir;renderReview();}
+function weekBounds(offset){
+  const d=new Date();const dow=d.getDay();
+  d.setDate(d.getDate()-dow+offset*7);
+  const start=d.toISOString().slice(0,10);
+  const e=new Date(d);e.setDate(e.getDate()+6);
+  return {start,end:e.toISOString().slice(0,10)};
+}
+function reviewBounds(){return reviewMode==='week'?weekBounds(reviewOffset):monthBounds(reviewOffset);}
+function reviewLabel(){
+  const {start,end}=reviewBounds();
+  const opt={month:'short',day:'numeric'};
+  if(reviewMode==='week'){
+    const s=new Date(start+'T00:00:00'),e=new Date(end+'T00:00:00');
+    const prefix=reviewOffset===0?'This week · ':reviewOffset===-1?'Last week · ':'';
+    return prefix+`${s.toLocaleDateString(undefined,opt)} – ${e.toLocaleDateString(undefined,opt)}`;
+  }
+  const d=new Date(start+'T00:00:00');
+  const prefix=reviewOffset===0?'This month · ':reviewOffset===-1?'Last month · ':'';
+  return prefix+d.toLocaleDateString(undefined,{month:'long',year:'numeric'});
+}
+function habitInstancesInRange(h,start,end){
+  let scheduled=0,done=0;
+  let cursor=new Date(start+'T00:00:00');
+  const endD=new Date(end+'T00:00:00');
+  const createdD=new Date(h.created);
+  let guard=0;
+  while(cursor<=endD&&guard<400){
+    guard++;
+    const ds=cursor.toISOString().slice(0,10);
+    if(cursor>=createdD&&isHabitScheduled(h,ds)){
+      scheduled++;
+      if(h.log.includes(ds))done++;
+    }
+    cursor.setDate(cursor.getDate()+1);
+  }
+  return {scheduled,done};
+}
+function renderReview(){
+  const {start,end}=reviewBounds();
+  $('reviewRangeLabel').textContent=reviewLabel();
+  const doneTasks=db.tasks.filter(t=>t.completedAt&&inRange(new Date(t.completedAt).toISOString().slice(0,10),start,end)).length;
+  $('revTasksDone').textContent=doneTasks;
+  let schedTotal=0,doneTotal=0;
+  db.habits.forEach(h=>{const r=habitInstancesInRange(h,start,end);schedTotal+=r.scheduled;doneTotal+=r.done;});
+  $('revHabitRate').textContent=schedTotal?Math.round(doneTotal/schedTotal*100)+'%':'—';
+  const inc=db.transactions.filter(t=>t.type==='income'&&inRange(t.date,start,end)).reduce((s,t)=>s+Number(t.amount||0),0);
+  const exp=db.transactions.filter(t=>t.type==='expense'&&inRange(t.date,start,end)).reduce((s,t)=>s+Number(t.amount||0),0);
+  const net=inc-exp;
+  $('revNet').textContent=fmt(net);
+  $('revNet').className='stat '+(net>=0?'amt-income':'amt-expense');
+  $('revThoughts').textContent=db.thoughts.filter(t=>inRange(new Date(t.created).toISOString().slice(0,10),start,end)).length;
+  const catMap={};
+  db.transactions.filter(t=>t.type==='expense'&&inRange(t.date,start,end)).forEach(t=>{const k=t.categoryId||'none';catMap[k]=(catMap[k]||0)+Number(t.amount||0);});
+  const cats=Object.keys(catMap).map(id=>({cat:db.categories.find(c=>c.id===id),total:catMap[id]})).sort((a,b)=>b.total-a.total).slice(0,5);
+  $('revCategories').innerHTML=cats.length?cats.map(c=>`<div class="item-top" style="padding:6px 0"><span>${c.cat?esc(c.cat.name):'Uncategorized'}</span><span class="amt-expense">${fmt(c.total)}</span></div>`).join(''):'<div class="empty">No expenses in this period.</div>';
+  const habitRows=db.habits.map(h=>({h,streak:habitStreak(h)})).sort((a,b)=>b.streak-a.streak).slice(0,5);
+  $('revHabits').innerHTML=habitRows.length?habitRows.map(({h,streak})=>`<div class="item-top" style="padding:6px 0"><span>${esc(h.name)}</span><span>${streak>0?'🔥 '+streak:'—'}</span></div>`).join(''):'<div class="empty">No habits yet.</div>';
+  const activeGoals=db.goals.filter(g=>g.progress<100);
+  $('revGoals').innerHTML=activeGoals.length?activeGoals.map(goalItem).join(''):'<div class="empty">No active goals.</div>';
+}
+// ============ END REVIEW ============
+
+// ============ REMINDERS ============
+function updateReminderBtn(){
+  const btn=$('reminderBtn');
+  if(!('Notification' in window)){btn.style.display='none';return;}
+  btn.style.display='inline-flex';
+  const perm=Notification.permission;
+  if(perm==='granted'){btn.textContent=db.settings.remindersEnabled?'🔔':'🔕';btn.title=db.settings.remindersEnabled?'Reminders on — tap to mute':'Reminders muted — tap to enable';}
+  else{btn.textContent='🔔';btn.title='Enable reminders';}
+}
+$('reminderBtn').onclick=async()=>{
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default'){
+    const p=await Notification.requestPermission();
+    if(p!=='granted'){updateReminderBtn();toast('Notifications blocked');return;}
+    db.settings.remindersEnabled=true;save();checkReminders(true);toast('Reminders enabled');
+  }else if(Notification.permission==='granted'){
+    db.settings.remindersEnabled=!db.settings.remindersEnabled;save();
+    toast(db.settings.remindersEnabled?'Reminders on':'Reminders muted');
+  }else{
+    toast('Notifications are blocked in your browser settings');
+  }
+  updateReminderBtn();
+};
+function checkReminders(force){
+  if(!('Notification' in window)||Notification.permission!=='granted'||!db.settings.remindersEnabled)return;
+  const lastCheck=localStorage.getItem('myLifeOS_lastReminder');
+  if(!force&&lastCheck===today())return;
+  const dueTasks=db.tasks.filter(t=>!t.done&&t.due===today());
+  const pendingHabits=db.habits.filter(h=>isHabitScheduled(h,today())&&!h.log.includes(today()));
+  if(dueTasks.length||pendingHabits.length){
+    const parts=[];
+    if(dueTasks.length)parts.push(`${dueTasks.length} task${dueTasks.length>1?'s':''} due today`);
+    if(pendingHabits.length)parts.push(`${pendingHabits.length} habit${pendingHabits.length>1?'s':''} left`);
+    try{new Notification('My Life OS',{body:parts.join(' · '),icon:'icon-192.png'});}catch(err){}
+  }
+  localStorage.setItem('myLifeOS_lastReminder',today());
+}
+// ============ AI ASSISTANT ============
+const AI_LIB_URL='./lib/web-llm.min.js';
+const AI_MODELS={
+  fast:{id:'Qwen2.5-0.5B-Instruct-q4f16_1-MLC',label:'Fast (Qwen2.5 0.5B)'},
+  balanced:{id:'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',label:'Balanced (Qwen2.5 1.5B)'}
+};
+let aiEngine=null,aiEngineModelKey=null,aiLoadingPromise=null,pendingItems=[];
+
+function aiSupported(){return typeof navigator!=='undefined'&&'gpu' in navigator}
+
+// Lazily creates (or reuses) the on-device engine. Model weights + runtime are fetched once
+// from their CDN on first use, then served from the browser's Cache Storage forever after —
+// no calls are made once a model is loaded.
+async function ensureAIEngine(modelKey,onProgress){
+  if(aiEngine&&aiEngineModelKey===modelKey)return aiEngine;
+  if(aiLoadingPromise)return aiLoadingPromise;
+  aiLoadingPromise=(async()=>{
+    const mod=await import(AI_LIB_URL);
+    const engine=await mod.CreateMLCEngine(AI_MODELS[modelKey].id,{initProgressCallback:onProgress||(()=>{})});
+    aiEngine=engine;aiEngineModelKey=modelKey;
+    return engine;
+  })();
+  try{return await aiLoadingPromise}finally{aiLoadingPromise=null}
+}
+
+// --- Brain dump: unstructured text -> structured thoughts/tasks/goals ---
+const BRAIN_DUMP_SCHEMA={
+  type:'object',
+  properties:{items:{type:'array',items:{type:'object',properties:{
+    type:{type:'string',enum:['task','goal','thought']},
+    title:{type:'string'},
+    body:{type:'string'},
+    priority:{type:'string',enum:['High','Medium','Low']},
+    due:{type:'string'},
+    deadline:{type:'string'},
+    tags:{type:'array',items:{type:'string'}}
+  },required:['type','title','body','priority','due','deadline','tags']}}},
+  required:['items']
+};
+function brainDumpSystemPrompt(){
+  return `You organize a personal brain dump into structured items for a productivity app. Split the input into one item per distinct idea, task, or goal.
+Use type "task" for a concrete next action (optionally with a due date), "goal" for a longer-term outcome or aspiration, "thought" for a note/idea/reflection with no clear next action.
+title: short summary, max 80 characters.
+body: any extra detail from the text, or "" if none.
+priority: for tasks, infer High/Medium/Low urgency from the wording; default "Medium". Use "Medium" for goals and thoughts (it is ignored for those types).
+due: for tasks only — an ISO date YYYY-MM-DD if a date or relative date (e.g. "tomorrow", "Friday") is mentioned, computed from today's date, ${today()}. Otherwise "".
+deadline: for goals only — same date rule as due. Otherwise "".
+tags: 0-3 short lowercase keywords relevant to the item, else [].
+Respond with ONLY a JSON object of the form {"items":[...]}. No other text, no markdown.`;
+}
+async function runBrainDump(text){
+  const modelKey=db.settings.aiModelKey||'fast';
+  const engine=await ensureAIEngine(modelKey);
+  const completion=await engine.chat.completions.create({
+    messages:[{role:'system',content:brainDumpSystemPrompt()},{role:'user',content:text}],
+    response_format:{type:'json_object',schema:JSON.stringify(BRAIN_DUMP_SCHEMA)},
+    temperature:0.2,
+    max_tokens:1200
+  });
+  const parsed=JSON.parse(completion.choices[0].message.content);
+  return Array.isArray(parsed.items)?parsed.items:[];
+}
+
+function brainDumpTypeChanged(idx){
+  const type=$('bdType'+idx).value;
+  $('bdBadge'+idx).textContent=type;
+  $('bdPriority'+idx).style.display=type==='task'?'block':'none';
+  $('bdDate'+idx).style.display=type==='thought'?'none':'block';
+  $('bdDate'+idx).placeholder=type==='goal'?'Deadline':'Due date';
+}
+function brainDumpItemRow(item,idx){
+  const type=item.type;
+  return `<div class="ai-item" data-idx="${idx}">
+    <div class="ai-item-head">
+      <input type="checkbox" id="bdInc${idx}" checked style="width:18px;height:18px;margin-top:4px">
+      <span class="ai-badge" id="bdBadge${idx}">${esc(type)}</span>
+      <div class="ai-fields">
+        <input id="bdTitle${idx}" value="${esc(item.title)}" placeholder="Title">
+        <div class="row">
+          <select id="bdType${idx}" onchange="brainDumpTypeChanged(${idx})">
+            <option value="task" ${type==='task'?'selected':''}>✅ Task</option>
+            <option value="goal" ${type==='goal'?'selected':''}>🎯 Goal</option>
+            <option value="thought" ${type==='thought'?'selected':''}>🧠 Thought</option>
+          </select>
+          <select id="bdPriority${idx}" style="display:${type==='task'?'block':'none'}">
+            <option ${item.priority==='High'?'selected':''}>High</option>
+            <option ${item.priority==='Medium'?'selected':''}>Medium</option>
+            <option ${item.priority==='Low'?'selected':''}>Low</option>
+          </select>
+        </div>
+        <input id="bdDate${idx}" type="date" value="${esc(item.due||item.deadline||'')}" placeholder="${type==='goal'?'Deadline':'Due date'}" style="display:${type==='thought'?'none':'block'}">
+        <textarea id="bdBody${idx}" placeholder="Extra detail (optional)" style="min-height:50px">${esc(item.body)}</textarea>
+        <input id="bdTags${idx}" value="${esc((item.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
+      </div>
+    </div>
+  </div>`;
+}
+function renderBrainDumpPreview(){
+  const wrap=$('brainDumpPreview');
+  if(!pendingItems.length){wrap.innerHTML='';return}
+  wrap.innerHTML=pendingItems.map((it,idx)=>brainDumpItemRow(it,idx)).join('')+
+    `<div class="ai-actions-row"><button type="button" class="btn small" onclick="cancelBrainDump()">Discard</button><button type="button" class="btn primary" onclick="confirmBrainDump()">Add selected to Life OS</button></div>`;
+}
+function cancelBrainDump(){pendingItems=[];$('brainDumpPreview').innerHTML='';toast('Discarded')}
+function confirmBrainDump(){
+  let added=0;
+  pendingItems.forEach((it,idx)=>{
+    const inc=$('bdInc'+idx);
+    if(!inc||!inc.checked)return;
+    const type=$('bdType'+idx).value;
+    const title=$('bdTitle'+idx).value.trim();
+    if(!title)return;
+    const body=$('bdBody'+idx).value.trim();
+    const tagList=tags($('bdTags'+idx).value);
+    const dateVal=$('bdDate'+idx).value;
+    if(type==='task'){
+      db.tasks.unshift({id:uid(),title,priority:$('bdPriority'+idx).value,due:dateVal||'',tags:tagList,done:false,created:Date.now(),recurrence:null,goalId:'',thoughtId:null,completedAt:null});
+    }else if(type==='goal'){
+      db.goals.unshift({id:uid(),title,deadline:dateVal||'',tags:tagList,progress:0,created:Date.now()});
+    }else{
+      db.thoughts.unshift({id:uid(),title,body,tags:tagList,created:Date.now(),taskId:null});
+    }
+    added++;
+  });
+  pendingItems=[];
+  $('brainDumpText').value='';
+  $('brainDumpPreview').innerHTML='';
+  save();
+  toast(added?`Added ${added} item${added>1?'s':''}`:'Nothing selected');
+}
+$('brainDumpForm').onsubmit=async e=>{
+  e.preventDefault();
+  const text=$('brainDumpText').value.trim();
+  if(!text)return;
+  if(!db.settings.aiModelKey){toast('Enable AI first');return}
+  const btn=$('brainDumpBtn');
+  btn.disabled=true;const oldLabel=btn.textContent;btn.textContent='Thinking…';
+  try{
+    const items=await runBrainDump(text);
+    pendingItems=items.map(it=>({
+      type:['task','goal','thought'].includes(it.type)?it.type:'thought',
+      title:(it.title||'').slice(0,120),
+      body:it.body||'',
+      priority:['High','Medium','Low'].includes(it.priority)?it.priority:'Medium',
+      due:it.due||'',
+      deadline:it.deadline||'',
+      tags:Array.isArray(it.tags)?it.tags.slice(0,5).filter(t=>typeof t==='string'):[]
+    }));
+    if(!pendingItems.length)toast('Nothing to organize — try adding more detail');
+    renderBrainDumpPreview();
+  }catch(err){
+    console.error(err);
+    toast('AI could not process that — try again or shorten the text');
+  }finally{
+    btn.disabled=false;btn.textContent=oldLabel;
+  }
+};
+
+// --- enable / download flow ---
+$('aiEnableBtn').onclick=async()=>{
+  if(!aiSupported()){toast('WebGPU is not available on this device');return}
+  const modelKey=$('aiModelSelect').value;
+  $('aiEnableBtn').disabled=true;$('aiModelSelect').disabled=true;
+  $('aiProgressWrap').style.display='block';
+  $('aiProgressText').textContent='Starting download…';
+  try{
+    await ensureAIEngine(modelKey,report=>{
+      $('aiProgressBar').style.width=Math.round((report.progress||0)*100)+'%';
+      $('aiProgressText').textContent=report.text||'';
+    });
+    db.settings.aiModelKey=modelKey;
+    save();
+    toast('AI enabled — fully on-device from here on');
+  }catch(err){
+    console.error(err);
+    toast('Could not enable AI — check your connection and try again');
+    $('aiEnableBtn').disabled=false;$('aiModelSelect').disabled=false;
+  }
+};
+function renderAssistant(){
+  const supported=aiSupported();
+  $('aiUnsupportedBlock').style.display=supported?'none':'block';
+  if(!supported){$('aiStatusText').textContent='';$('aiEnableBlock').style.display='none';$('aiBrainDumpCard').style.display='none';return}
+  if(db.settings.aiModelKey&&AI_MODELS[db.settings.aiModelKey]){
+    const m=AI_MODELS[db.settings.aiModelKey];
+    $('aiStatusText').textContent=`AI is on — using the ${m.label} model. Runs fully on-device; nothing you write is sent anywhere.`;
+    $('aiEnableBlock').style.display='none';
+    $('aiBrainDumpCard').style.display='block';
+    $('aiModelBadge').textContent=m.label;
+  }else{
+    $('aiStatusText').textContent='AI is off. Enable it to organize brain dumps automatically — this downloads a small language model once, then runs fully offline on this device.';
+    $('aiEnableBlock').style.display='block';
+    $('aiBrainDumpCard').style.display='none';
+  }
+}
+// ============ END AI ASSISTANT ============
+
+function render(){
+  $('statTasks').textContent=db.tasks.filter(x=>!x.done).length;
+  $('statGoals').textContent=db.goals.filter(x=>x.progress<100).length;
+  $('statThoughts').textContent=db.thoughts.length;
+  $('statBalance').textContent=fmt(totalBalance());
+  let tt=db.tasks.filter(x=>!x.done&&(x.due===today()||!x.due)).slice(0,8);
+  $('todayTasks').innerHTML=tt.length?tt.map(taskItem).join(''):'<div class="empty">No tasks for today 🎉</div>';
+  let gg=db.goals.filter(x=>x.progress<100).slice(0,5);
+  $('todayGoals').innerHTML=gg.length?gg.map(goalItem).join(''):'<div class="empty">No active goals.</div>';
+  let hh=db.habits.filter(h=>isHabitScheduled(h,today()));
+  $('todayHabits').innerHTML=hh.length?hh.map(habitItem).join(''):'<div class="empty">No habits scheduled today.</div>';
+  $('habitList').innerHTML=db.habits.length?db.habits.map(habitItem).join(''):'<div class="empty">No habits yet. Add one to start a streak.</div>';
+  $('thoughtCount').textContent=db.thoughts.length;
+  $('thoughtList').innerHTML=db.thoughts.length?db.thoughts.map(thoughtItem).join(''):'<div class="empty">Your captured thoughts will appear here.</div>';
+  refreshFilterOptions();
+  const ft=filteredTasks();
+  $('taskList').innerHTML=ft.length?ft.map(taskItem).join(''):(db.tasks.length?'<div class="empty">No tasks match these filters.</div>':'<div class="empty">No tasks yet.</div>');
+  $('goalList').innerHTML=db.goals.length?db.goals.map(goalItem).join(''):'<div class="empty">No goals yet.</div>';
+  renderFinance();
+  renderReview();
+  renderAssistant();
+  renderSearch();
+  checkReminders();
+}
+function renderSearch(){
+  const q=($('searchInput').value||'').trim().toLowerCase();
+  if(!q){$('searchResults').innerHTML='<div class="empty">Type something to search your local data.</div>';return}
+  let out=[];
+  if(searchFilters.thoughts)db.thoughts.forEach(x=>{if((x.title+' '+x.body+' '+(x.tags||[]).join(' ')).toLowerCase().includes(q))out.push(`<div class="item"><b>🧠 Thought</b>${thoughtItem(x)}</div>`)});
+  if(searchFilters.tasks)db.tasks.forEach(x=>{if((x.title+' '+(x.tags||[]).join(' ')).toLowerCase().includes(q))out.push(`<div class="item"><b>✅ Task</b>${taskItem(x)}</div>`)});
+  if(searchFilters.goals)db.goals.forEach(x=>{if((x.title+' '+(x.tags||[]).join(' ')).toLowerCase().includes(q))out.push(`<div class="item"><b>🎯 Goal</b>${goalItem(x)}</div>`)});
+  $('searchResults').innerHTML=out.length?out.join(''):'<div class="empty">Nothing found.</div>';
+}
+function exportData(){const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-life-os-backup.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exported')}
+$('importFile').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const x=JSON.parse(r.result);if(!x.thoughts||!x.tasks||!x.goals)throw Error();db=x;migrate();save();toast('Backup imported')}catch{toast('Invalid backup file')}};r.readAsText(f);e.target.value=''};
+
+// --- PWA install prompt ---
+let deferredPrompt=null;
+window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredPrompt=e;$('installBtn').style.display='inline-flex';});
+$('installBtn').onclick=async()=>{if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('installBtn').style.display='none';};
+window.addEventListener('appinstalled',()=>{$('installBtn').style.display='none';toast('Installed')});
+
+// --- service worker registration (no-op if not served over http/https) ---
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})});
+}
+
+$('txDate').value=today();
+updateReminderBtn();
+render();
+</script>
+</body>
+</html>
