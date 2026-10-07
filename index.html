@@ -22,7 +22,7 @@ nav{display:flex;gap:6px;overflow:auto;margin-bottom:18px}.navbtn{white-space:no
 .stat{font-size:26px;font-weight:750;margin-top:5px}.muted{color:var(--muted)}.section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px}.section-title h2{font-size:17px;margin:0}
 form{display:grid;gap:10px}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--card);color:var(--text)}textarea{min-height:100px;resize:vertical}.row{display:flex;gap:8px}.row>*{flex:1}
 .item{border:1px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;background:var(--card)}.item-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.item-title{font-weight:650}.item-body{white-space:pre-wrap;margin-top:6px;color:var(--muted)}.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:12px;color:var(--muted)}.tag{background:var(--accent2);border-radius:999px;padding:4px 8px}.priority-high{color:#b42318}.priority-medium{color:#b54708}.priority-low{color:#027a48}[data-theme="dark"] .priority-high{color:#fca5a5}[data-theme="dark"] .priority-medium{color:#fcd34d}[data-theme="dark"] .priority-low{color:#6ee7b7}.done{text-decoration:line-through;opacity:.55}.empty{padding:25px;text-align:center;color:var(--muted)}
-.check{width:20px;height:20px;margin-top:1px}.actions{display:flex;gap:5px;flex-wrap:wrap}.small{font-size:12px;padding:6px 8px}.progress{height:8px;background:var(--accent2);border-radius:99px;overflow:hidden;margin-top:9px}.progress>div{height:100%;background:var(--accent)}
+.check{width:20px;height:20px;margin-top:1px}.actions{display:flex;gap:5px;flex-wrap:wrap}.small{font-size:12px;padding:6px 8px}.progress{height:8px;background:var(--accent2);border-radius:99px;overflow:hidden;margin-top:9px}.progress>div{height:100%;background:var(--accent)}.health{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:650}.health-on{background:#dcfce7;color:#166534}.health-risk{background:#fef3c7;color:#92400e}.health-behind{background:#fee2e2;color:#991b1b}.health-paused{background:var(--accent2);color:var(--muted)}.next-action{margin-top:10px;padding:9px 10px;border-radius:10px;background:var(--bg);font-size:13px}.subtle{font-size:12px;color:var(--muted)}
 .searchbar{margin-bottom:12px}.searchbar input{font-size:15px}
 .filterbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.filterbar select{width:auto;flex:1 1 120px}
 .checkrow{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:14px}.checkrow label{display:flex;align-items:center;gap:6px}
@@ -98,7 +98,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 0}
         <div class="row"><select id="taskPriority"><option>Medium</option><option>High</option><option>Low</option></select><input id="taskDue" type="date"></div>
         <div class="row">
           <select id="taskRecurrence"><option value="">Does not repeat</option><option value="daily">Repeats daily</option><option value="weekly">Repeats weekly</option><option value="monthly">Repeats monthly</option></select>
-          <select id="taskGoal"><option value="">No goal</option></select>
+          <select id="taskGoal"><option value="">No goal</option></select><select id="taskProject"><option value="">No project</option></select>
         </div>
         <input id="taskTags" placeholder="Tags, separated by commas"><button class="btn primary">Add task</button>
       </form>
@@ -119,9 +119,13 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 0}
 <section id="goals" class="page">
   <div class="grid">
     <div class="card span-4"><div class="section-title"><h2>New goal</h2></div>
-      <form id="goalForm"><input id="goalTitle" placeholder="Goal" required><input id="goalDeadline" type="date"><input id="goalTags" placeholder="Tags, separated by commas"><button class="btn primary">Create goal</button></form>
+      <form id="goalForm"><input id="goalTitle" placeholder="What do you want to achieve?" required><input id="goalDeadline" type="date"><select id="goalStatus"><option value="active">Active</option><option value="paused">Paused</option></select><input id="goalTags" placeholder="Tags, separated by commas"><button class="btn primary">Create goal</button></form>
     </div>
-    <div class="card span-8"><div class="section-title"><h2>Goals</h2></div><div id="goalList"></div></div>
+    <div class="card span-8"><div class="section-title"><div><h2>Goals</h2><div class="subtle">Progress is calculated from projects/tasks when available.</div></div><button class="btn small" onclick="showPage('tasks')">Plan tasks</button></div><div id="goalList"></div></div>
+    <div class="card span-12"><div class="section-title"><div><h2>Projects</h2><div class="subtle">Break a goal into meaningful pieces of work.</div></div></div>
+      <form id="projectForm" class="row"><input id="projectTitle" placeholder="Project name" required><select id="projectGoal"><option value="">Choose goal</option></select><input id="projectDeadline" type="date"><button class="btn primary">Add project</button></form>
+      <div id="projectList"></div>
+    </div>
   </div>
 </section>
 
@@ -266,7 +270,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 0}
 <section id="assistant" class="page">
   <div class="grid">
     <div class="card span-12">
-      <div class="section-title"><h2>✨ AI Assistant</h2></div>
+      <div class="section-title"><h2>✨ AI Assistant</h2><button class="btn small" id="aiSwitchModelBtn" style="display:none">Switch model</button></div>
       <p class="muted" id="aiStatusText"></p>
       <div id="aiEnableBlock">
         <div class="row">
@@ -275,6 +279,7 @@ footer{text-align:center;color:var(--muted);font-size:12px;padding:28px 0}
             <option value="balanced">Balanced — Qwen2.5 1.5B (~1.6GB download)</option>
           </select>
           <button class="btn primary" id="aiEnableBtn">Enable AI</button>
+          <button type="button" class="btn small" id="aiCancelSwitchBtn" style="display:none">Cancel</button>
         </div>
         <div class="progress" id="aiProgressWrap" style="display:none"><div id="aiProgressBar" style="width:0%"></div></div>
         <p class="muted ai-progress-text" id="aiProgressText"></p>
@@ -325,8 +330,9 @@ const today=()=>new Date().toISOString().slice(0,10);
 // --- migration: backfill new fields so old data still works ---
 function migrate(){
   db.thoughts=(db.thoughts||[]).map(t=>({tags:[],taskId:null,...t}));
-  db.tasks=(db.tasks||[]).map(t=>({tags:[],recurrence:null,goalId:'',thoughtId:null,completedAt:null,...t}));
-  db.goals=(db.goals||[]).map(g=>({tags:[],progress:0,...g}));
+  db.tasks=(db.tasks||[]).map(t=>({tags:[],recurrence:null,goalId:'',projectId:'',thoughtId:null,completedAt:null,...t}));
+  db.goals=(db.goals||[]).map(g=>({tags:[],progress:0,status:'active',...g}));
+  db.projects=(db.projects||[]).map(p=>({goalId:'',deadline:'',status:'active',created:Date.now(),...p}));
   db.accounts=db.accounts||[];
   db.categories=db.categories||[];
   db.transactions=(db.transactions||[]).map(t=>({notes:'',...t}));
@@ -375,10 +381,11 @@ $('themeToggle').onclick=()=>applyTheme(document.documentElement.dataset.theme==
 
 // --- capture forms (thoughts/tasks/goals) ---
 $('quickForm').onsubmit=e=>{e.preventDefault();let body=$('quickText').value.trim();if(!body)return;db.thoughts.unshift({id:uid(),title:'',body,tags:[],created:Date.now(),taskId:null});$('quickText').value='';save();toast('Thought captured')};
-$('quickTaskForm').onsubmit=e=>{e.preventDefault();let title=$('quickTask').value.trim();if(!title)return;db.tasks.unshift({id:uid(),title,priority:$('quickPriority').value,due:today(),tags:[],done:false,created:Date.now(),recurrence:null,goalId:'',thoughtId:null,completedAt:null});$('quickTask').value='';save();toast('Task added')};
+$('quickTaskForm').onsubmit=e=>{e.preventDefault();let title=$('quickTask').value.trim();if(!title)return;db.tasks.unshift({id:uid(),title,priority:$('quickPriority').value,due:today(),tags:[],done:false,created:Date.now(),recurrence:null,goalId:'',projectId:'',thoughtId:null,completedAt:null});$('quickTask').value='';save();toast('Task added')};
 $('thoughtForm').onsubmit=e=>{e.preventDefault();db.thoughts.unshift({id:uid(),title:$('thoughtTitle').value.trim(),body:$('thoughtBody').value.trim(),tags:tags($('thoughtTags').value),created:Date.now(),taskId:null});e.target.reset();save();toast('Thought captured')};
-$('taskForm').onsubmit=e=>{e.preventDefault();const fr=$('taskRecurrence').value;db.tasks.unshift({id:uid(),title:$('taskTitle').value.trim(),priority:$('taskPriority').value,due:$('taskDue').value,tags:tags($('taskTags').value),done:false,created:Date.now(),recurrence:fr?{freq:fr}:null,goalId:$('taskGoal').value||'',thoughtId:null,completedAt:null});e.target.reset();save();toast('Task added')};
-$('goalForm').onsubmit=e=>{e.preventDefault();db.goals.unshift({id:uid(),title:$('goalTitle').value.trim(),deadline:$('goalDeadline').value,tags:tags($('goalTags').value),progress:0,created:Date.now()});e.target.reset();save();toast('Goal created')};
+$('taskForm').onsubmit=e=>{e.preventDefault();const fr=$('taskRecurrence').value;const projectId=$('taskProject').value||'';const project=projectId?db.projects.find(p=>p.id===projectId):null;const goalId=project?project.goalId:($('taskGoal').value||'');db.tasks.unshift({id:uid(),title:$('taskTitle').value.trim(),priority:$('taskPriority').value,due:$('taskDue').value,tags:tags($('taskTags').value),done:false,created:Date.now(),recurrence:fr?{freq:fr}:null,goalId,projectId,thoughtId:null,completedAt:null});e.target.reset();save();toast('Task added')};
+$('goalForm').onsubmit=e=>{e.preventDefault();db.goals.unshift({id:uid(),title:$('goalTitle').value.trim(),deadline:$('goalDeadline').value,tags:tags($('goalTags').value),progress:0,status:$('goalStatus').value,created:Date.now()});e.target.reset();save();toast('Goal created')};
+$('projectForm').onsubmit=e=>{e.preventDefault();const goalId=$('projectGoal').value;if(!goalId){toast('Choose a goal first');return}db.projects.unshift({id:uid(),title:$('projectTitle').value.trim(),goalId,deadline:$('projectDeadline').value,status:'active',created:Date.now()});e.target.reset();save();toast('Project created')};
 $('searchInput').oninput=renderSearch;
 ['searchThoughts','searchTasks','searchGoals'].forEach(id=>$(id).onchange=()=>{searchFilters={thoughts:$('searchThoughts').checked,tasks:$('searchTasks').checked,goals:$('searchGoals').checked};renderSearch()});
 ['filterStatus','filterPriority','filterTag','filterSort'].forEach(id=>$(id).onchange=()=>{taskFilters={status:$('filterStatus').value,priority:$('filterPriority').value,tag:$('filterTag').value,sort:$('filterSort').value};render()});
@@ -404,8 +411,16 @@ function toggleTask(id){
   }
   save();
 }
-function deleteItem(type,id){db[type]=db[type].filter(x=>x.id!==id);editingIds.delete(id);save();toast('Deleted')}
-function setProgress(id,v){let x=db.goals.find(x=>x.id===id);if(x){x.progress=Math.max(0,Math.min(100,+v));save()}}
+function deleteItem(type,id){if(type==='goals'){db.projects=db.projects.filter(p=>p.goalId!==id);db.tasks.forEach(t=>{if(t.goalId===id)t.goalId='';if(t.projectId&&!db.projects.some(p=>p.id===t.projectId))t.projectId='';});}db[type]=db[type].filter(x=>x.id!==id);editingIds.delete(id);save();toast(type==='goals'?'Goal deleted; linked work kept':'Deleted')}
+function setProgress(id,v){let x=db.goals.find(x=>x.id===id);if(x){x.progress=Math.max(0,Math.min(100,+v));x.manualProgress=true;save()}}
+function goalProjects(goalId){return db.projects.filter(p=>p.goalId===goalId)}
+function projectTasks(projectId){return db.tasks.filter(t=>t.projectId===projectId)}
+function projectProgress(p){const ts=projectTasks(p.id);return ts.length?Math.round(ts.filter(t=>t.done).length/ts.length*100):0}
+function goalProgress(g){const ps=goalProjects(g.id);if(ps.length)return Math.round(ps.reduce((a,p)=>a+projectProgress(p),0)/ps.length);const ts=db.tasks.filter(t=>t.goalId===g.id);return ts.length?Math.round(ts.filter(t=>t.done).length/ts.length*100):Number(g.progress||0)}
+function goalHealth(g){if(g.status==='paused')return ['Paused','health-paused'];const pct=goalProgress(g);if(pct>=100)return ['Complete','health-on'];if(!g.deadline)return ['No deadline','health-paused'];const days=Math.ceil((new Date(g.deadline+'T00:00:00')-new Date(today()+'T00:00:00'))/86400000);if(days<0)return ['Behind','health-behind'];if(days<=7&&pct<80)return ['At risk','health-risk'];return ['On track','health-on']}
+function nextActionForGoal(g){const ps=goalProjects(g.id);let ts=db.tasks.filter(t=>!t.done&&((t.goalId===g.id)||(t.projectId&&ps.some(p=>p.id===t.projectId))));ts.sort((a,b)=>{const pr={High:0,Medium:1,Low:2};return (pr[a.priority]??1)-(pr[b.priority]??1)||(a.due||'9999-99-99').localeCompare(b.due||'9999-99-99')});return ts[0]||null}
+function projectItem(p){const g=db.goals.find(g=>g.id===p.goalId);const ts=projectTasks(p.id),pct=projectProgress(p);return `<div class="item"><div class="item-top"><div><div class="item-title">📁 ${esc(p.title)}</div><div class="meta"><span>🎯 ${esc(g?.title||'Unlinked goal')}</span>${p.deadline?`<span>Target ${esc(p.deadline)}</span>`:''}<span>${ts.filter(t=>t.done).length}/${ts.length} tasks</span></div></div><div class="actions"><button class="iconbtn small" onclick="deleteProject('${p.id}')">✕</button></div></div><div class="progress"><div style="width:${pct}%"></div></div><div class="subtle" style="margin-top:6px">${pct}% complete</div></div>`}
+function deleteProject(id){db.tasks.forEach(t=>{if(t.projectId===id){t.projectId='';}});db.projects=db.projects.filter(p=>p.id!==id);save();toast('Project deleted; tasks kept')}
 function clearCompleted(){db.tasks=db.tasks.filter(x=>!x.done);save();toast('Completed tasks cleared')}
 
 // --- linking: thought -> task ---
@@ -432,6 +447,7 @@ function saveThoughtEdit(e,id){e.preventDefault();const f=e.target;const t=db.th
 
 function taskEditForm(x){
   const goalOptions=db.goals.map(g=>`<option value="${g.id}" ${x.goalId===g.id?'selected':''}>${esc(g.title)}</option>`).join('');
+  const projectOptions=db.projects.filter(p=>!x.goalId||p.goalId===x.goalId).map(p=>`<option value="${p.id}" ${x.projectId===p.id?'selected':''}>${esc(p.title)}</option>`).join('');
   const freq=x.recurrence?x.recurrence.freq:'';
   return `<div class="item"><form onsubmit="return saveTaskEdit(event,'${x.id}')">
     <input name="title" value="${esc(x.title)}" required>
@@ -441,42 +457,37 @@ function taskEditForm(x){
     </div>
     <div class="row">
       <select name="recurrence"><option value="" ${freq===''?'selected':''}>Does not repeat</option><option value="daily" ${freq==='daily'?'selected':''}>Repeats daily</option><option value="weekly" ${freq==='weekly'?'selected':''}>Repeats weekly</option><option value="monthly" ${freq==='monthly'?'selected':''}>Repeats monthly</option></select>
-      <select name="goalId"><option value="">No goal</option>${goalOptions}</select>
+      <select name="goalId"><option value="">No goal</option>${goalOptions}</select><select name="projectId"><option value="">No project</option>${projectOptions}</select>
     </div>
     <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
     <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
   </form></div>`;
 }
-function saveTaskEdit(e,id){e.preventDefault();const f=e.target;const x=db.tasks.find(t=>t.id===id);if(x){x.title=f.title.value.trim();x.priority=f.priority.value;x.due=f.due.value;x.tags=tags(f.tags.value);x.goalId=f.goalId.value||'';const fr=f.recurrence.value;x.recurrence=fr?{freq:fr}:null;}editingIds.delete(id);save();toast('Task updated');return false;}
+function saveTaskEdit(e,id){e.preventDefault();const f=e.target;const x=db.tasks.find(t=>t.id===id);if(x){x.title=f.title.value.trim();x.priority=f.priority.value;x.due=f.due.value;x.tags=tags(f.tags.value);x.goalId=f.goalId.value||'';x.projectId=f.projectId.value||'';if(x.projectId){const p=db.projects.find(p=>p.id===x.projectId);if(p)x.goalId=p.goalId;}const fr=f.recurrence.value;x.recurrence=fr?{freq:fr}:null;}editingIds.delete(id);save();toast('Task updated');return false;}
 
 function goalEditForm(x){
   return `<div class="item"><form onsubmit="return saveGoalEdit(event,'${x.id}')">
     <input name="title" value="${esc(x.title)}" required>
     <input name="deadline" type="date" value="${x.deadline||''}">
+    <select name="status"><option value="active" ${x.status!=='paused'?'selected':''}>Active</option><option value="paused" ${x.status==='paused'?'selected':''}>Paused</option><option value="completed" ${x.status==='completed'?'selected':''}>Completed</option></select>
     <input name="tags" value="${esc((x.tags||[]).join(', '))}" placeholder="Tags, separated by commas">
     <div class="row"><button class="btn primary small">Save</button><button type="button" class="btn small" onclick="cancelEdit('${x.id}')">Cancel</button></div>
   </form></div>`;
 }
-function saveGoalEdit(e,id){e.preventDefault();const f=e.target;const g=db.goals.find(x=>x.id===id);if(g){g.title=f.title.value.trim();g.deadline=f.deadline.value;g.tags=tags(f.tags.value);}editingIds.delete(id);save();toast('Goal updated');return false;}
+function saveGoalEdit(e,id){e.preventDefault();const f=e.target;const g=db.goals.find(x=>x.id===id);if(g){g.title=f.title.value.trim();g.deadline=f.deadline.value;g.status=f.status.value;g.tags=tags(f.tags.value);}editingIds.delete(id);save();toast('Goal updated');return false;}
 
 // --- item renderers: thoughts/tasks/goals ---
 function taskItem(x){
   if(editingIds.has(x.id))return taskEditForm(x);
-  const goal=x.goalId?db.goals.find(g=>g.id===x.goalId):null;
-  const badges=[
-    x.due?`<span>Due ${esc(x.due)}</span>`:'',
-    tagHtml(x.tags),
-    x.recurrence?`<span class="tag">🔁 ${esc(x.recurrence.freq)}</span>`:'',
-    goal?`<span class="tag">🎯 ${esc(goal.title)}</span>`:'',
-    x.thoughtId?'<span class="tag">🧠 from a thought</span>':''
-  ].join('');
+  const goal=x.goalId?db.goals.find(g=>g.id===x.goalId):null;const project=x.projectId?db.projects.find(p=>p.id===x.projectId):null;
+  const badges=[x.due?`<span>Due ${esc(x.due)}</span>`:'',tagHtml(x.tags),x.recurrence?`<span class="tag">🔁 ${esc(x.recurrence.freq)}</span>`:'',goal?`<span class="tag">🎯 ${esc(goal.title)}</span>`:'',project?`<span class="tag">📁 ${esc(project.title)}</span>`:'',x.thoughtId?'<span class="tag">🧠 from a thought</span>':''].join('');
   return `<div class="item"><div class="item-top"><div style="display:flex;gap:9px"><input class="check" type="checkbox" ${x.done?'checked':''} onchange="toggleTask('${x.id}')"><div><div class="item-title ${x.done?'done':''}">${esc(x.title)}</div><div class="meta"><span class="priority-${x.priority.toLowerCase()}">${esc(x.priority)}</span>${badges}</div></div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('tasks','${x.id}')">✕</button></div></div></div>`;
 }
 function goalItem(x){
   if(editingIds.has(x.id))return goalEditForm(x);
-  const linked=db.tasks.filter(t=>t.goalId===x.id);
-  const linkedMeta=linked.length?`<span>${linked.filter(t=>t.done).length}/${linked.length} linked tasks done</span>`:'';
-  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.title)}</div><div class="meta">${x.deadline?`<span>Target ${esc(x.deadline)}</span>`:''}${linkedMeta}${tagHtml(x.tags)}</div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('goals','${x.id}')">✕</button></div></div><div class="progress"><div style="width:${x.progress}%"></div></div><div class="row" style="margin-top:8px"><input type="range" min="0" max="100" value="${x.progress}" oninput="setProgress('${x.id}',this.value)"><span class="muted" style="flex:0 0 40px;text-align:right">${x.progress}%</span></div></div>`;
+  const pct=goalProgress(x),ps=goalProjects(x.id),linked=db.tasks.filter(t=>t.goalId===x.id),[health,hc]=goalHealth(x),next=nextActionForGoal(x);
+  const source=ps.length?`${ps.length} project${ps.length>1?'s':''}`:linked.length?`${linked.filter(t=>t.done).length}/${linked.length} tasks`:x.manualProgress?'manual progress':'No work linked yet';
+  return `<div class="item"><div class="item-top"><div><div class="item-title">${esc(x.title)}</div><div class="meta"><span class="health ${hc}">${esc(health)}</span>${x.deadline?`<span>Target ${esc(x.deadline)}</span>`:''}<span>${source}</span>${tagHtml(x.tags)}</div></div><div class="actions"><button class="iconbtn small" onclick="startEdit('${x.id}')">✎</button><button class="iconbtn small" onclick="deleteItem('goals','${x.id}')">✕</button></div></div><div class="progress"><div style="width:${pct}%"></div></div><div class="row" style="margin-top:8px"><span class="muted" style="font-size:12px">${pct}% complete</span>${!ps.length&&!linked.length?`<input type="range" min="0" max="100" value="${pct}" oninput="setProgress('${x.id}',this.value)"><span class="muted" style="flex:0 0 40px;text-align:right">Manual</span>`:''}</div>${next?`<div class="next-action">↗ <b>Next:</b> ${esc(next.title)}${next.due?` <span class="subtle">· due ${esc(next.due)}</span>`:''}</div>`:`<div class="next-action subtle">No open next action. Add a task or project to move this goal forward.</div>`}</div>`;
 }
 function thoughtItem(x){
   if(editingIds.has(x.id))return thoughtEditForm(x);
@@ -499,11 +510,12 @@ function filteredTasks(){
   });
 }
 function refreshFilterOptions(){
-  const tagSel=$('filterTag');const cur=taskFilters.tag;
-  const uniqueTags=[...new Set(db.tasks.flatMap(t=>t.tags||[]))].sort();
+  const tagSel=$('filterTag');const cur=taskFilters.tag;const uniqueTags=[...new Set(db.tasks.flatMap(t=>t.tags||[]))].sort();
   tagSel.innerHTML='<option value="">All tags</option>'+uniqueTags.map(t=>`<option value="${esc(t)}" ${t===cur?'selected':''}>#${esc(t)}</option>`).join('');
-  const goalSel=$('taskGoal');const curGoal=goalSel.value;
+  const goalSel=$('taskGoal'),projectSel=$('taskProject');const curGoal=goalSel.value,curProject=projectSel.value;
   goalSel.innerHTML='<option value="">No goal</option>'+db.goals.map(g=>`<option value="${g.id}" ${g.id===curGoal?'selected':''}>${esc(g.title)}</option>`).join('');
+  projectSel.innerHTML='<option value="">No project</option>'+db.projects.map(p=>`<option value="${p.id}" ${p.id===curProject?'selected':''}>📁 ${esc(p.title)}</option>`).join('');
+  const pg=$('projectGoal');if(pg){const curP=pg.value;pg.innerHTML='<option value="">Choose goal</option>'+db.goals.map(g=>`<option value="${g.id}" ${g.id===curP?'selected':''}>${esc(g.title)}</option>`).join('');}
 }
 
 // ============ HABITS ============
@@ -900,7 +912,7 @@ function renderReview(){
   $('revCategories').innerHTML=cats.length?cats.map(c=>`<div class="item-top" style="padding:6px 0"><span>${c.cat?esc(c.cat.name):'Uncategorized'}</span><span class="amt-expense">${fmt(c.total)}</span></div>`).join(''):'<div class="empty">No expenses in this period.</div>';
   const habitRows=db.habits.map(h=>({h,streak:habitStreak(h)})).sort((a,b)=>b.streak-a.streak).slice(0,5);
   $('revHabits').innerHTML=habitRows.length?habitRows.map(({h,streak})=>`<div class="item-top" style="padding:6px 0"><span>${esc(h.name)}</span><span>${streak>0?'🔥 '+streak:'—'}</span></div>`).join(''):'<div class="empty">No habits yet.</div>';
-  const activeGoals=db.goals.filter(g=>g.progress<100);
+  const activeGoals=db.goals.filter(g=>goalProgress(g)<100&&g.status!=='completed');
   $('revGoals').innerHTML=activeGoals.length?activeGoals.map(goalItem).join(''):'<div class="empty">No active goals.</div>';
 }
 // ============ END REVIEW ============
@@ -948,7 +960,7 @@ const AI_MODELS={
   fast:{id:'Qwen2.5-0.5B-Instruct-q4f16_1-MLC',label:'Fast (Qwen2.5 0.5B)'},
   balanced:{id:'Qwen2.5-1.5B-Instruct-q4f16_1-MLC',label:'Balanced (Qwen2.5 1.5B)'}
 };
-let aiEngine=null,aiEngineModelKey=null,aiLoadingPromise=null,pendingItems=[];
+let aiEngine=null,aiEngineModelKey=null,aiLoadingPromise=null,pendingItems=[],aiSwitchingModel=false;
 
 function aiSupported(){return typeof navigator!=='undefined'&&'gpu' in navigator}
 
@@ -960,6 +972,12 @@ async function ensureAIEngine(modelKey,onProgress){
   if(aiLoadingPromise)return aiLoadingPromise;
   aiLoadingPromise=(async()=>{
     const mod=await import(AI_LIB_URL);
+    if(aiEngine&&aiEngineModelKey!==modelKey){
+      // Switching models: free the previously loaded model's GPU memory first.
+      // Cached model weights (per model id) are unaffected — only the in-memory engine is released.
+      try{await aiEngine.unload()}catch(err){console.error('AI engine unload failed (continuing):',err)}
+      aiEngine=null;aiEngineModelKey=null;
+    }
     const engine=await mod.CreateMLCEngine(AI_MODELS[modelKey].id,{initProgressCallback:onProgress||(()=>{})});
     aiEngine=engine;aiEngineModelKey=modelKey;
     return engine;
@@ -1100,11 +1118,12 @@ $('brainDumpForm').onsubmit=async e=>{
   }
 };
 
-// --- enable / download flow ---
+// --- enable / download / switch flow ---
 $('aiEnableBtn').onclick=async()=>{
   if(!aiSupported()){toast('WebGPU is not available on this device');return}
   const modelKey=$('aiModelSelect').value;
-  $('aiEnableBtn').disabled=true;$('aiModelSelect').disabled=true;
+  const wasSwitching=aiSwitchingModel;
+  $('aiEnableBtn').disabled=true;$('aiModelSelect').disabled=true;$('aiCancelSwitchBtn').disabled=true;
   $('aiProgressWrap').style.display='block';
   $('aiProgressText').textContent='Starting download…';
   try{
@@ -1113,40 +1132,56 @@ $('aiEnableBtn').onclick=async()=>{
       $('aiProgressText').textContent=report.text||'';
     });
     db.settings.aiModelKey=modelKey;
+    aiSwitchingModel=false;
     save();
-    toast('AI enabled — fully on-device from here on');
+    toast(wasSwitching?'Switched model — fully on-device from here on':'AI enabled — fully on-device from here on');
   }catch(err){
     console.error(err);
-    toast('Could not enable AI — check your connection and try again');
-    $('aiEnableBtn').disabled=false;$('aiModelSelect').disabled=false;
+    toast(wasSwitching?'Could not switch model — check your connection and try again':'Could not enable AI — check your connection and try again');
+    $('aiEnableBtn').disabled=false;$('aiModelSelect').disabled=false;$('aiCancelSwitchBtn').disabled=false;
   }
+};
+$('aiSwitchModelBtn').onclick=()=>{
+  aiSwitchingModel=true;
+  renderAssistant();
+};
+$('aiCancelSwitchBtn').onclick=()=>{
+  aiSwitchingModel=false;
+  $('aiProgressWrap').style.display='none';
+  $('aiProgressText').textContent='';
+  renderAssistant();
 };
 function renderAssistant(){
   const supported=aiSupported();
   $('aiUnsupportedBlock').style.display=supported?'none':'block';
-  if(!supported){$('aiStatusText').textContent='';$('aiEnableBlock').style.display='none';$('aiBrainDumpCard').style.display='none';return}
-  if(db.settings.aiModelKey&&AI_MODELS[db.settings.aiModelKey]){
+  if(!supported){$('aiStatusText').textContent='';$('aiEnableBlock').style.display='none';$('aiBrainDumpCard').style.display='none';$('aiSwitchModelBtn').style.display='none';return}
+  const enabled=db.settings.aiModelKey&&AI_MODELS[db.settings.aiModelKey];
+  if(enabled&&!aiSwitchingModel){
     const m=AI_MODELS[db.settings.aiModelKey];
     $('aiStatusText').textContent=`AI is on — using the ${m.label} model. Runs fully on-device; nothing you write is sent anywhere.`;
     $('aiEnableBlock').style.display='none';
     $('aiBrainDumpCard').style.display='block';
     $('aiModelBadge').textContent=m.label;
+    $('aiSwitchModelBtn').style.display='inline-flex';
   }else{
-    $('aiStatusText').textContent='AI is off. Enable it to organize brain dumps automatically — this downloads a small language model once, then runs fully offline on this device.';
+    $('aiStatusText').textContent=enabled?'Choose a model to switch to. If it hasn\'t been downloaded on this device before, it downloads once, then runs fully offline.':'AI is off. Enable it to organize brain dumps automatically — this downloads a small language model once, then runs fully offline on this device.';
+    if(enabled)$('aiModelSelect').value=db.settings.aiModelKey;
     $('aiEnableBlock').style.display='block';
     $('aiBrainDumpCard').style.display='none';
+    $('aiSwitchModelBtn').style.display='none';
+    $('aiCancelSwitchBtn').style.display=enabled?'inline-flex':'none';
   }
 }
 // ============ END AI ASSISTANT ============
 
 function render(){
   $('statTasks').textContent=db.tasks.filter(x=>!x.done).length;
-  $('statGoals').textContent=db.goals.filter(x=>x.progress<100).length;
+  $('statGoals').textContent=db.goals.filter(x=>goalProgress(x)<100&&x.status!=='completed').length;
   $('statThoughts').textContent=db.thoughts.length;
   $('statBalance').textContent=fmt(totalBalance());
   let tt=db.tasks.filter(x=>!x.done&&(x.due===today()||!x.due)).slice(0,8);
   $('todayTasks').innerHTML=tt.length?tt.map(taskItem).join(''):'<div class="empty">No tasks for today 🎉</div>';
-  let gg=db.goals.filter(x=>x.progress<100).slice(0,5);
+  let gg=db.goals.filter(x=>goalProgress(x)<100&&x.status!=='completed').slice(0,5);
   $('todayGoals').innerHTML=gg.length?gg.map(goalItem).join(''):'<div class="empty">No active goals.</div>';
   let hh=db.habits.filter(h=>isHabitScheduled(h,today()));
   $('todayHabits').innerHTML=hh.length?hh.map(habitItem).join(''):'<div class="empty">No habits scheduled today.</div>';
@@ -1157,6 +1192,7 @@ function render(){
   const ft=filteredTasks();
   $('taskList').innerHTML=ft.length?ft.map(taskItem).join(''):(db.tasks.length?'<div class="empty">No tasks match these filters.</div>':'<div class="empty">No tasks yet.</div>');
   $('goalList').innerHTML=db.goals.length?db.goals.map(goalItem).join(''):'<div class="empty">No goals yet.</div>';
+  $('projectList').innerHTML=db.projects.length?db.projects.map(projectItem).join(''):'<div class="empty">No projects yet. Create one under a goal.</div>';
   renderFinance();
   renderReview();
   renderAssistant();

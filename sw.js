@@ -1,13 +1,12 @@
 // Bump this on every deploy so clients pick up the new app shell.
-const CACHE = 'life-os-v4.1.0';
+const CACHE = 'life-os-v3.0.0';
 const SHELL = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './icon-512-maskable.png',
-  './lib/web-llm.min.js'
+  './icon-512-maskable.png'
 ];
 
 self.addEventListener('install', (e) => {
