@@ -101,6 +101,39 @@ async function run(gpuPresent, label) {
 
     assert(ev('pendingItems.length') === 0, 'pendingItems cleared after confirm');
     assert($('brainDumpText').value === '', 'brain dump textarea cleared after confirm');
+
+    // --- switch model flow ---
+    assert($('aiSwitchModelBtn').style.display === 'inline-flex', 'Switch model button shown once AI enabled');
+    $('aiSwitchModelBtn').click();
+    assert(ev('aiSwitchingModel') === true, 'aiSwitchingModel flag set on click');
+    assert($('aiEnableBlock').style.display === 'block', 'enable block reappears when switching');
+    assert($('aiBrainDumpCard').style.display === 'none', 'brain dump card hidden while switching');
+    assert($('aiModelSelect').value === 'fast', 'model select pre-filled with current model on switch');
+    assert($('aiCancelSwitchBtn').style.display === 'inline-flex', 'Cancel button shown while switching');
+    assert($('aiSwitchModelBtn').style.display === 'none', 'Switch model button hidden while its own picker is open');
+
+    // cancel should revert cleanly, leaving the original model untouched
+    $('aiCancelSwitchBtn').click();
+    assert(ev('aiSwitchingModel') === false, 'aiSwitchingModel flag cleared on cancel');
+    assert(ev("db.settings.aiModelKey") === 'fast', 'cancel does not change the active model');
+    assert($('aiBrainDumpCard').style.display === 'block', 'brain dump card restored after cancel');
+
+    // now actually switch, simulating a completed download of a different model without a real WebGPU device
+    $('aiSwitchModelBtn').click();
+    $('aiModelSelect').value = 'balanced';
+    ev("db.settings.aiModelKey='balanced'; aiSwitchingModel=false");
+    window.renderAssistant();
+    assert(ev("db.settings.aiModelKey") === 'balanced', 'model key updated after switch');
+    assert($('aiModelBadge').textContent.includes('1.5B'), 'badge reflects newly switched model');
+    assert($('aiBrainDumpCard').style.display === 'block', 'brain dump card shown again after switch completes');
+    assert($('aiEnableBlock').style.display === 'none', 'enable block hidden again after switch completes');
+
+    // --- ensureAIEngine: verify the unload-old-model-before-switch logic is present ---
+    // (ensureAIEngine dynamically imports the real WebLLM bundle, which isn't invokable in this
+    // jsdom harness without a real WebGPU device, so this checks the guard logic statically.)
+    const engineSrc = window.eval('ensureAIEngine.toString()');
+    assert(engineSrc.includes('aiEngineModelKey!==modelKey'), 'ensureAIEngine checks for a model switch');
+    assert(engineSrc.includes('.unload()'), 'ensureAIEngine calls unload() on the previous engine when switching');
   }
 
   dom.window.close();
